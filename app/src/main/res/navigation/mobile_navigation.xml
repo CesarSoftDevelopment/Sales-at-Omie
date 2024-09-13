@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_home">
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.cesarsoftdevelopment.omiesales.ui.main.home.HomeFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/navigation_make_sale"
+        android:name="com.cesarsoftdevelopment.omiesales.ui.main.makesale.MakeSaleFragment"
+        android:label="@string/title_make_sale"
+        tools:layout="@layout/fragment_make_sale" />
+
+    <fragment
+        android:id="@+id/navigation_sale_history"
+        android:name="com.cesarsoftdevelopment.omiesales.ui.main.saleshistory.SalesHistoryFragment"
+        android:label="@string/title_sale_history"
+        tools:layout="@layout/fragment_sales_history" />
+</navigation>
