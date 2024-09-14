@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     id("androidx.navigation.safeargs.kotlin")
     id("com.google.devtools.ksp")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -82,6 +83,10 @@ dependencies {
 
     // SHIMMER
     implementation(libs.shimmer)
+
+    // GSON
+    implementation(libs.gson)
+
 
 
 }
