@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 interface ProductLocalDataSource {
     suspend fun saveProduct(productEntity: ProductEntity)
     fun getProducts() : Flow<List<ProductEntity>>
-    suspend fun deleteProduct(product: ProductEntity)
+    suspend fun deleteProductById(productId: Int)
     suspend fun updateProductQuantity(productId: Int, newQuantity: Int)
 
 }

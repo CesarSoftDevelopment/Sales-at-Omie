@@ -4,7 +4,9 @@ import com.cesarsoftdevelopment.omiesales.data.database.ProductDao
 import com.cesarsoftdevelopment.omiesales.data.model.ProductEntity
 import com.cesarsoftdevelopment.omiesales.data.repository.datasource.ProductLocalDataSource
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.withContext
 
 class ProductLocalDataSourceImpl(
     private val productDao: ProductDao,
@@ -12,15 +14,21 @@ class ProductLocalDataSourceImpl(
 ) : ProductLocalDataSource {
 
     override suspend fun saveProduct(productEntity: ProductEntity) {
-        TODO("Not yet implemented")
+
+        withContext(ioDispatcher) {
+            productDao.insertProduct(productEntity)
+        }
+
     }
 
     override fun getProducts(): Flow<List<ProductEntity>> {
         return productDao.getAllProducts()
     }
 
-    override suspend fun deleteProduct(product: ProductEntity) {
-        TODO("Not yet implemented")
+    override suspend fun deleteProductById(productId: Int) {
+        withContext(ioDispatcher) {
+            productDao.deleteProductById(productId)
+        }
     }
 
     override suspend fun updateProductQuantity(productId: Int, newQuantity: Int) {

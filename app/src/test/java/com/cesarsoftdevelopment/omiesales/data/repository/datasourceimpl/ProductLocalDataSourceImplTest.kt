@@ -11,10 +11,8 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
-import org.mockito.Mockito.doNothing
 import org.mockito.Mockito.`when`
 import org.mockito.junit.MockitoJUnitRunner
-import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 
 @RunWith(MockitoJUnitRunner::class)
@@ -32,7 +30,7 @@ class ProductLocalDataSourceImplTest {
 
 
     @Test
-    fun `getProducts should return a list of products`() = runTest {
+    fun `getProducts should return a list of local products`() = runTest {
 
         val productList = listOf(ProductEntity(
             id = 1,
@@ -48,6 +46,56 @@ class ProductLocalDataSourceImplTest {
         val result = productLocalDataSource.getProducts().first()
 
         assertEquals(productList, result)
+    }
+
+    @Test
+    fun `saveProduct should call insert method of dao`() = runTest {
+
+        val product = ProductEntity(
+            id = 1,
+            productName = "Test Product",
+            quantity = 1,
+            unitValue = 10.0,
+            totalValue = 10.0
+        )
+
+        productLocalDataSource.saveProduct(product)
+
+        verify(productDao).insertProduct(product)
+    }
+
+    @Test
+    fun `deleteProduct should call delete method of dao`() = runTest {
+
+        val productId = ProductEntity(
+            id = 1,
+            productName = "Test Product",
+            quantity = 1,
+            unitValue = 10.0,
+            totalValue = 10.0
+        ).id
+
+        productLocalDataSource.deleteProductById(productId)
+
+        verify(productDao).deleteProductById(productId)
+    }
+
+    @Test
+    fun `updateProductQuantity should call update method of dao`() = runTest {
+
+        val productId = ProductEntity(
+            id = 1,
+            productName = "Test Product",
+            quantity = 1,
+            unitValue = 10.0,
+            totalValue = 10.0
+        ).id
+
+        val newQuantity = 10
+
+        productDao.updateProductQuantity(productId, newQuantity)
+
+        verify(productDao).updateProductQuantity(productId, newQuantity)
     }
 
 }

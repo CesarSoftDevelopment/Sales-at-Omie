@@ -1,6 +1,7 @@
 package com.cesarsoftdevelopment.omiesales.data.database
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -16,4 +17,10 @@ interface ProductDao {
 
     @Query("SELECT * FROM product")
     fun getAllProducts(): Flow<List<ProductEntity>>
+
+    @Query("DELETE FROM product WHERE id = :productId")
+    suspend fun deleteProductById(productId: Int)
+
+    @Query("UPDATE product SET quantity = :newQuantity WHERE id = :productId")
+    suspend fun updateProductQuantity(productId: Int, newQuantity: Int)
 }
