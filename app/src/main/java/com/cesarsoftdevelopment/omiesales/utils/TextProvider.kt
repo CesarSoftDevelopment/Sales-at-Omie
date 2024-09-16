@@ -1,9 +1,10 @@
 package com.cesarsoftdevelopment.omiesales.utils
 
-object Texts {
+object TextProvider {
 
-    const val productEmpty  = "Produto não pode ser vazio."
-    const val quantityLessThanZero  = "Quantidade do produto precisa ser maior que 0."
-    const val unitValueLessThanZero  = "Valor unitário precisa ser maior que 0."
+    const val PRODUCT_NAME_EMPTY  = "Produto não pode ser vazio."
+    const val QUANTITY_LESS_THAN_ZERO  = "Quantidade do produto precisa ser maior que 0."
+    const val UNIT_VALUE_LESS_THAN_ZERO  = "Valor unitário precisa ser maior que 0."
+    const val CLIENT_NAME_EMPTY  = "Nome do cliente não pode estar vazio."
 
 }

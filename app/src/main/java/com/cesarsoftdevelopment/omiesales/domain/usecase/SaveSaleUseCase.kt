@@ -5,6 +5,9 @@ import com.cesarsoftdevelopment.omiesales.domain.repository.SaleRepository
 
 class SaveSaleUseCase(private val saleRepository: SaleRepository) {
     suspend operator fun invoke(sale: Sale) {
+
+
+
         saleRepository.saveSale(sale)
     }
 
