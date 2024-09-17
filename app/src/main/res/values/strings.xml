@@ -3,4 +3,7 @@
     <string name="title_home">Home</string>
     <string name="title_make_sale">Efetuar vendas</string>
     <string name="title_sale_history">Histórico de vendas</string>
+    <string name="menu">Menu</string>
+    <string name="create_sale">Criar venda</string>
+    <string name="historic">Histórico</string>
 </resources>
