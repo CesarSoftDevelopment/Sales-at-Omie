@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -7,92 +8,100 @@
     android:layout_height="match_parent"
     tools:context=".ui.main.home.HomeFragment">
 
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="0dp"
-        android:layout_height="300dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/open_sans_bold"
+        app:layout_constraintBottom_toTopOf="@+id/mc_create_sale"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginBottom="32dp"
+        android:text="@string/menu"
+        android:textColor="@color/black"
+        android:textSize="22sp"
+        />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/mc_create_sale"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
         android:layout_marginStart="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageButton
+                android:id="@+id/imageButton2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_shopping"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/open_sans_bold"
+                android:text="@string/create_sale"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="@+id/imageButton2"
+                app:layout_constraintStart_toStartOf="@+id/imageButton2"
+                app:layout_constraintTop_toBottomOf="@+id/imageButton2" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/mc_sales"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:layout_marginStart="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         android:layout_marginEnd="12dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/menu"
-                android:textSize="22sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="12dp"
-                android:textColor="@color/black"
-                android:fontFamily="@font/open_sans_bold"
-                />
-
-
             <ImageButton
-                android:id="@+id/imageButton"
+                android:id="@+id/imageButton22"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:background="@android:color/transparent"
-                android:src="@drawable/ic_shopping"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="72dp"
-                />
-
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/open_sans_bold"
-                android:text="@string/create_sale"
-                android:textColor="@color/black"
-                app:layout_constraintEnd_toEndOf="@+id/imageButton"
-                app:layout_constraintStart_toStartOf="@+id/imageButton"
-                app:layout_constraintTop_toBottomOf="@+id/imageButton"
-                android:layout_marginTop="5dp"
-
-
-                />
-
-
-            <ImageButton
-                android:id="@+id/imageButton2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="72dp"
-                android:layout_marginEnd="32dp"
                 android:background="@android:color/transparent"
                 android:src="@drawable/ic_historic"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-                />
 
             <TextView
+                android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/open_sans_bold"
                 android:text="@string/historic"
                 android:textColor="@color/black"
-                app:layout_constraintEnd_toEndOf="@+id/imageButton2"
-                app:layout_constraintHorizontal_bias="0.846"
-                app:layout_constraintStart_toStartOf="@+id/imageButton2"
-                app:layout_constraintTop_toBottomOf="@+id/imageButton2"
-                android:layout_marginTop="5dp"
-                />
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="@+id/imageButton22"
+                app:layout_constraintStart_toStartOf="@+id/imageButton22"
+                app:layout_constraintTop_toBottomOf="@+id/imageButton22" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
     </com.google.android.material.card.MaterialCardView>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
