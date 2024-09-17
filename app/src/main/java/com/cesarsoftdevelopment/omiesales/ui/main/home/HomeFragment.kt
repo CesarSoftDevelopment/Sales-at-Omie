@@ -7,6 +7,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
+import com.cesarsoftdevelopment.omiesales.R
 import com.cesarsoftdevelopment.omiesales.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
@@ -20,12 +23,30 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val homeViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
-
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        val root: View = binding.root
+        setUpNavigation()
+        return binding.root
+    }
 
-        return root
+    private fun setUpNavigation() {
+        navigateToCreateSale()
+        navigateToSales()
+    }
+
+    private fun navigateToCreateSale() {
+        binding.mcCreateSale.setOnClickListener {
+            it.findNavController().navigate(
+                HomeFragmentDirections.actionNavigationHomeToNavigationMakeSale()
+            )
+        }
+    }
+
+    private fun navigateToSales() {
+        binding.mcSales.setOnClickListener {
+            it.findNavController().navigate(
+                HomeFragmentDirections.actionNavigationHomeToNavigationSaleHistory()
+            )
+        }
     }
 
     override fun onDestroyView() {

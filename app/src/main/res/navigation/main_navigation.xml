@@ -9,7 +9,14 @@
         android:id="@+id/navigation_home"
         android:name="com.cesarsoftdevelopment.omiesales.ui.main.home.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_navigation_home_to_navigation_make_sale"
+            app:destination="@id/navigation_make_sale" />
+        <action
+            android:id="@+id/action_navigation_home_to_navigation_sale_history"
+            app:destination="@id/navigation_sale_history" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_make_sale"
