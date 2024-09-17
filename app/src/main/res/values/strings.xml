@@ -6,4 +6,15 @@
     <string name="menu">Menu</string>
     <string name="create_sale">Criar venda</string>
     <string name="historic">Vendas</string>
+    <string name="client">Cliente</string>
+    <string name="write_client_name">Escreva o nome do cliente</string>
+    <string name="product">Produto</string>
+    <string name="item_total_value">Valor total do item R$ 0,00</string>
+    <string name="product_name">Nome do Produto</string>
+    <string name="product_quantity">Quantidade</string>
+    <string name="unit_value">Valor unitário</string>
+    <string name="insert">Inserir</string>
+    <string name="items_list">Lista de items</string>
+    <string name="cancel">Cancelar</string>
+    <string name="save">Salvar</string>
 </resources>
