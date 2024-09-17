@@ -33,13 +33,17 @@
             app:layout_constraintTop_toBottomOf="@+id/textView3"
             android:layout_marginTop="12dp"
             android:layout_marginStart="42dp"
-            android:layout_marginEnd="42dp">
+            android:layout_marginEnd="42dp"
+            android:hint="@string/write_client_name"
+            app:boxBackgroundMode="outline"
+            app:boxBackgroundColor="@color/white"
+            >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/write_client_name"
                 android:fontFamily="@font/open_sans_bold"
+                android:textSize="14sp"
 
                 />
         </com.google.android.material.textfield.TextInputLayout>
@@ -69,6 +73,8 @@
             android:layout_marginTop="12dp"
             android:layout_marginStart="42dp"
             android:layout_marginEnd="42dp"
+            app:boxBackgroundMode="outline"
+            app:boxBackgroundColor="@color/white"
             >
 
             <com.google.android.material.textfield.TextInputEditText
@@ -76,6 +82,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/product_name"
                 android:fontFamily="@font/open_sans_bold"
+                android:textSize="14sp"
                 />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -89,7 +96,10 @@
             app:layout_constraintTop_toBottomOf="@+id/textInputLayout2"
             android:layout_marginTop="12dp"
             android:layout_marginStart="42dp"
-            android:layout_marginEnd="42dp">
+            android:layout_marginEnd="42dp"
+            app:boxBackgroundMode="outline"
+            app:boxBackgroundColor="@color/white"
+            >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
@@ -97,6 +107,7 @@
                 android:hint="@string/product_quantity"
                 android:inputType="number"
                 android:fontFamily="@font/open_sans_bold"
+                android:textSize="14sp"
 
                 />
         </com.google.android.material.textfield.TextInputLayout>
@@ -110,13 +121,18 @@
             app:layout_constraintTop_toBottomOf="@+id/textInputLayout3"
             android:layout_marginTop="12dp"
             android:layout_marginStart="42dp"
-            android:layout_marginEnd="42dp">
+            android:layout_marginEnd="42dp"
+            app:boxBackgroundMode="outline"
+            app:boxBackgroundColor="@color/white"
+            >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/unit_value"
                 android:fontFamily="@font/open_sans_bold"
+                android:textSize="14sp"
+
                 />
 
         </com.google.android.material.textfield.TextInputLayout>
