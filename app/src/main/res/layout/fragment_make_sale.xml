@@ -37,7 +37,7 @@
                 android:id="@+id/client_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/open_sans_bold"
+                android:fontFamily="@font/open_sans_medium"
                 android:textSize="14sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -68,7 +68,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/product_name"
-                android:fontFamily="@font/open_sans_bold"
+                android:fontFamily="@font/open_sans_medium"
                 android:textSize="14sp"
                 />
 
@@ -91,7 +91,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/product_quantity"
                 android:inputType="number"
-                android:fontFamily="@font/open_sans_bold"
+                android:fontFamily="@font/open_sans_medium"
                 android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -111,7 +111,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/unit_value"
-                android:fontFamily="@font/open_sans_bold"
+                android:fontFamily="@font/open_sans_medium"
                 android:textSize="14sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -126,6 +126,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textInputLayout4"
             android:layout_marginTop="12dp"
+            android:textColor="@color/black"
             />
 
         <Button

@@ -1,7 +1,5 @@
 package com.cesarsoftdevelopment.omiesales.ui.main.makesale
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cesarsoftdevelopment.omiesales.domain.model.Product
@@ -24,8 +22,7 @@ class MakeSaleViewModel(
     private val _products  = MutableStateFlow<List<Product>>(emptyList())
     val products : StateFlow<List<Product>> = _products
 
-
-    fun saveProduct(product: Product) = viewModelScope.launch {
+    fun saveProduct(clientName : String, product: Product) = viewModelScope.launch {
         saveProductUseCase.invoke(product)
     }
 
@@ -37,9 +34,7 @@ class MakeSaleViewModel(
         }
     }
 
-    fun updateProduct(
-        productId : Int, newQuantity : Int
-    ) = viewModelScope.launch {
+    fun updateProduct(productId : Int, newQuantity : Int) = viewModelScope.launch {
        updateProductQuantityUseCase.invoke(productId, newQuantity)
     }
 
@@ -48,7 +43,7 @@ class MakeSaleViewModel(
     }
 
     fun saveSale() {
-
+        //TODO
     }
 
 }
