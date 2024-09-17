@@ -61,6 +61,7 @@ dependencies {
 
     // UNIT TEST
     testImplementation(libs.junit)
+    testImplementation(libs.kotlin.test.junit)
     testImplementation(libs.mockito.core)
     testImplementation(libs.mockito.kotlin)
     testImplementation(libs.core.ktx)
@@ -68,7 +69,7 @@ dependencies {
     testImplementation(libs.androidx.core.testing)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.androidx.room.testing)
-    testImplementation(libs.kotlin.test.junit)
+    testImplementation(libs.mockk)
 
 
     // ROOM

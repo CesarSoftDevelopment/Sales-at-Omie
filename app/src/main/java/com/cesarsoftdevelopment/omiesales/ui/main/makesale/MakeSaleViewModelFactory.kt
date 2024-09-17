@@ -9,7 +9,6 @@ import com.cesarsoftdevelopment.omiesales.domain.usecase.SaveProductUseCase
 import com.cesarsoftdevelopment.omiesales.domain.usecase.UpdateProductQuantityUseCase
 
 class MakeSaleViewModelFactory(
-    private val application: Application,
     private val saveProductUseCase: SaveProductUseCase,
     private val getProductsUseCase: GetProductsUseCase,
     private val updateProductQuantityUseCase: UpdateProductQuantityUseCase,
@@ -19,7 +18,6 @@ class MakeSaleViewModelFactory(
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return MakeSaleViewModel(
-            application,
             saveProductUseCase,
             getProductsUseCase,
             updateProductQuantityUseCase,

@@ -18,7 +18,6 @@ class FactoryModule {
     @Singleton
     @Provides
     fun provideMakeSaleViewModelFactory(
-        application: Application,
         saveProductUseCase : SaveProductUseCase,
         getProductsUseCase : GetProductsUseCase,
         updateProductQuantityUseCase : UpdateProductQuantityUseCase,
@@ -27,13 +26,11 @@ class FactoryModule {
 
     ): MakeSaleViewModelFactory {
         return MakeSaleViewModelFactory(
-            application,
             saveProductUseCase,
             getProductsUseCase,
             updateProductQuantityUseCase,
             deleteProductUseCase,
             saveSaleUseCase
-
         )
     }
 }

@@ -8,6 +8,10 @@ object SaleValidator {
         if (sale.clientName.isBlank()) {
             throw IllegalArgumentException(TextProvider.CLIENT_NAME_EMPTY)
         }
+
+        if (sale.products.isEmpty()) {
+            throw IllegalArgumentException(TextProvider.CLIENT_NAME_EMPTY)
+        }
     }
 
 }

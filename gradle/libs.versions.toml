@@ -18,6 +18,7 @@ lifecycleLivedataKtx = "2.8.5"
 lifecycleViewmodelKtx = "2.8.5"
 mockitoCore = "4.11.0"
 mockitoKotlin = "4.0.0"
+mockk = "1.12.0"
 navigationFragmentKtx = "2.8.0"
 navigationUiKtx = "2.8.0"
 legacySupportV4 = "1.0.0"
@@ -55,6 +56,7 @@ androidx-legacy-support-v4 = { group = "androidx.legacy", name = "legacy-support
 androidx-fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "fragmentKtx" }
 mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockitoCore" }
 mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "mockitoKotlin" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 shimmer = { module = "com.facebook.shimmer:shimmer", version.ref = "shimmer" }
 truth = { module = "com.google.truth:truth", version.ref = "truth" }
 

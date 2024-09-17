@@ -32,9 +32,11 @@ class SaveSaleUseCaseTest {
     @Test
     fun `invoke should throw IllegalArgumentException when clientName is empty`() = runTest {
 
-        val client = "João"
+        val client = ""
 
         val totalPrice  = 0.0
+
+        val products = listOf<Product>()
 
         val product = Product(
             id = 1,
@@ -50,8 +52,31 @@ class SaveSaleUseCaseTest {
             products = listOf(product)
         )
 
-
         assertFailsWith<IllegalArgumentException>(TextProvider.CLIENT_NAME_EMPTY) {
+            saveSaleUseCase.invoke(sale)
+        }
+
+        verify(saleRepository,never()).saveSale(any())
+
+    }
+
+    @Test
+    fun `invoke should throw IllegalArgumentException when products is empty`() = runTest {
+
+        val client = "João"
+
+        val totalPrice  = 0.0
+
+        val products = listOf<Product>()
+
+        val sale = Sale(
+            clientName = client,
+            totalPrice = totalPrice,
+            products = products
+        )
+
+
+        assertFailsWith<IllegalArgumentException>(TextProvider.LIST_EMPTY) {
             saveSaleUseCase.invoke(sale)
         }
 

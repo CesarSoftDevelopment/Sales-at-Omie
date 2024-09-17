@@ -14,7 +14,6 @@ class ProductLocalDataSourceImpl(
 ) : ProductLocalDataSource {
 
     override suspend fun saveProduct(productEntity: ProductEntity) {
-
         withContext(ioDispatcher) {
             productDao.insertProduct(productEntity)
         }
