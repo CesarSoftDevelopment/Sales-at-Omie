@@ -112,7 +112,9 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/unit_value"
                 android:fontFamily="@font/open_sans_medium"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:inputType="number"
+                />
 
         </com.google.android.material.textfield.TextInputLayout>
 

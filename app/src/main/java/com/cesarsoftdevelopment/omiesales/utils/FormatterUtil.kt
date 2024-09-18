@@ -8,6 +8,6 @@ object FormatterUtil {
     fun formatToBrazilianCurrency(value: Double): String {
         val brazilianLocale = Locale("pt", "BR")
         val currencyFormatter = NumberFormat.getCurrencyInstance(brazilianLocale)
-        return currencyFormatter.format(value)
+        return currencyFormatter.format(value / 100)
     }
 }
