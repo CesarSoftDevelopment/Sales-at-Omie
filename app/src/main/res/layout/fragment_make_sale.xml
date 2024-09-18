@@ -130,7 +130,7 @@
             />
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/btn_insert"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/open_sans_bold"
@@ -154,7 +154,7 @@
             app:layout_constraintBottom_toTopOf="@+id/product_quantity_sale"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button"
+            app:layout_constraintTop_toBottomOf="@+id/btn_insert"
             tools:itemCount="1"
             tools:listitem="@layout/product_item" />
 

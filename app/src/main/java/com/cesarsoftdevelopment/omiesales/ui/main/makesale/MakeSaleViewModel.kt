@@ -7,6 +7,7 @@ import com.cesarsoftdevelopment.omiesales.domain.usecase.DeleteProductUseCase
 import com.cesarsoftdevelopment.omiesales.domain.usecase.GetProductsUseCase
 import com.cesarsoftdevelopment.omiesales.domain.usecase.SaveProductUseCase
 import com.cesarsoftdevelopment.omiesales.domain.usecase.UpdateProductQuantityUseCase
+import com.cesarsoftdevelopment.omiesales.utils.TextProvider
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -22,8 +23,13 @@ class MakeSaleViewModel(
     private val _products  = MutableStateFlow<List<Product>>(emptyList())
     val products : StateFlow<List<Product>> = _products
 
-    fun saveProduct(clientName : String, product: Product) = viewModelScope.launch {
+
+    fun saveProduct(product: Product) = viewModelScope.launch {
         saveProductUseCase.invoke(product)
+    }
+
+    fun validateFields(clientName : String, product: Product) {
+
     }
 
     fun getProducts() {
