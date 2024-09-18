@@ -1,6 +1,7 @@
 package com.cesarsoftdevelopment.omiesales.di.modules
 
 import android.app.Application
+import com.cesarsoftdevelopment.omiesales.domain.usecase.DeleteAllProductsUseCase
 import com.cesarsoftdevelopment.omiesales.domain.usecase.DeleteProductUseCase
 import com.cesarsoftdevelopment.omiesales.domain.usecase.GetProductsUseCase
 import com.cesarsoftdevelopment.omiesales.domain.usecase.SaveProductUseCase
@@ -22,6 +23,7 @@ class FactoryModule {
         getProductsUseCase : GetProductsUseCase,
         updateProductQuantityUseCase : UpdateProductQuantityUseCase,
         deleteProductUseCase : DeleteProductUseCase,
+        deleteAllProductsUseCase: DeleteAllProductsUseCase,
         saveSaleUseCase: SaveProductUseCase
 
     ): MakeSaleViewModelFactory {
@@ -30,6 +32,7 @@ class FactoryModule {
             getProductsUseCase,
             updateProductQuantityUseCase,
             deleteProductUseCase,
+            deleteAllProductsUseCase,
             saveSaleUseCase
         )
     }

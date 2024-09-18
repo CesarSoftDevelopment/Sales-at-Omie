@@ -11,14 +11,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.findNavController
 import com.cesarsoftdevelopment.omiesales.R
 import com.cesarsoftdevelopment.omiesales.databinding.FragmentHomeBinding
 import com.cesarsoftdevelopment.omiesales.databinding.FragmentMakeSaleBinding
 import com.cesarsoftdevelopment.omiesales.domain.model.Product
 import com.cesarsoftdevelopment.omiesales.ui.main.MainActivity
+import com.cesarsoftdevelopment.omiesales.ui.main.home.HomeFragmentDirections
 import com.cesarsoftdevelopment.omiesales.utils.FormatterUtil
 import com.cesarsoftdevelopment.omiesales.utils.SaleValidator
 import kotlinx.coroutines.launch
@@ -60,6 +63,7 @@ class MakeSaleFragment : Fragment() {
         observeErrorMessage()
         setAdapter()
         observeItemsList()
+        handleWhenCancelButtonIsClicked()
     }
 
     private fun setViewModel() {
@@ -140,7 +144,7 @@ class MakeSaleFragment : Fragment() {
                     totalOrderValue = SaleValidator.calculateTotalValue(items)
 
                     binding.productQuantitySale.text = "Qt de itens: $listItemsQuantity"
-                    binding.totalSale.text = FormatterUtil.formatToBrazilianCurrency(totalOrderValue)
+                    binding.totalSale.text = "Valor total: ${FormatterUtil.formatToBrazilianCurrency(totalOrderValue)}"
                     makeSaleAdapter.submitList(items)
                 }
             }
@@ -233,6 +237,43 @@ class MakeSaleFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun createAlertDialog() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Cancelar pedido.")
+        builder.setMessage("Você perderá os itens adicionados na lista. Deseja sair?")
+
+        builder.setPositiveButton("Sim") { dialog, which ->
+            makeSaleViewModel.deleteAllProducts()
+            navigateToHomeFragment()
+        }
+
+
+        builder.setNegativeButton("Não") { dialog, which ->
+            dialog.dismiss()
+        }
+
+
+        val alertDialog = builder.create()
+        alertDialog.show()
+    }
+
+    private fun handleWhenCancelButtonIsClicked() {
+
+       binding.btnCancel.setOnClickListener {
+           if(listItemsQuantity > 0) {
+               createAlertDialog()
+           }else {
+               navigateToHomeFragment()
+           }
+       }
+    }
+
+    private fun navigateToHomeFragment() {
+        requireView().findNavController().navigate(
+            MakeSaleFragmentDirections.actionNavigationMakeSaleToNavigationHome()
+        )
     }
 
 }

@@ -35,5 +35,9 @@ class ProductRepositoryImpl(
         productLocalDataSource.deleteProductById(productId)
     }
 
+    override suspend fun deleteAllProducts() {
+        productLocalDataSource.deleteAllProducts()
+    }
+
 
 }

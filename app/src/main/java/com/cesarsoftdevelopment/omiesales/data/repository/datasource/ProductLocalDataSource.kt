@@ -7,6 +7,7 @@ interface ProductLocalDataSource {
     suspend fun saveProduct(productEntity: ProductEntity)
     fun getProducts() : Flow<List<ProductEntity>>
     suspend fun deleteProductById(productId: Int)
+    suspend fun deleteAllProducts()
     suspend fun updateProductQuantity(productId: Int, newQuantity: Int)
 
 }

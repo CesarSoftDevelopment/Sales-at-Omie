@@ -3,6 +3,7 @@ package com.cesarsoftdevelopment.omiesales.ui.main.makesale
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cesarsoftdevelopment.omiesales.domain.model.Product
+import com.cesarsoftdevelopment.omiesales.domain.usecase.DeleteAllProductsUseCase
 import com.cesarsoftdevelopment.omiesales.domain.usecase.DeleteProductUseCase
 import com.cesarsoftdevelopment.omiesales.domain.usecase.GetProductsUseCase
 import com.cesarsoftdevelopment.omiesales.domain.usecase.SaveProductUseCase
@@ -18,6 +19,7 @@ class MakeSaleViewModel(
     private val getProductsUseCase: GetProductsUseCase,
     private val updateProductQuantityUseCase: UpdateProductQuantityUseCase,
     private val deleteProductUseCase: DeleteProductUseCase,
+    private val deleteAllProductsUseCase : DeleteAllProductsUseCase,
     private val saveSaleUseCase: SaveProductUseCase
 ) : ViewModel() {
 
@@ -114,6 +116,11 @@ class MakeSaleViewModel(
     fun deleteProduct(productId : Int) = viewModelScope.launch {
         deleteProductUseCase.invoke(productId)
     }
+
+    fun deleteAllProducts() = viewModelScope.launch {
+        deleteAllProductsUseCase.invoke()
+    }
+
 
     fun saveSale() {
         //TODO

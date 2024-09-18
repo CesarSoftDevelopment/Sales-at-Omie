@@ -22,11 +22,19 @@
         android:id="@+id/navigation_make_sale"
         android:name="com.cesarsoftdevelopment.omiesales.ui.main.makesale.MakeSaleFragment"
         android:label="@string/title_make_sale"
-        tools:layout="@layout/fragment_make_sale" />
+        tools:layout="@layout/fragment_make_sale" >
+        <action
+            android:id="@+id/action_navigation_make_sale_to_navigation_home"
+            app:destination="@id/navigation_home" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_sale_history"
         android:name="com.cesarsoftdevelopment.omiesales.ui.main.saleshistory.SalesHistoryFragment"
         android:label="@string/title_sale_history"
-        tools:layout="@layout/fragment_sales_history" />
+        tools:layout="@layout/fragment_sales_history" >
+        <action
+            android:id="@+id/action_navigation_sale_history_to_navigation_home"
+            app:destination="@id/navigation_home" />
+    </fragment>
 </navigation>

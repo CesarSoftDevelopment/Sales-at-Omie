@@ -2,6 +2,7 @@ package com.cesarsoftdevelopment.omiesales.di.modules
 
 import com.cesarsoftdevelopment.omiesales.domain.repository.ProductRepository
 import com.cesarsoftdevelopment.omiesales.domain.repository.SaleRepository
+import com.cesarsoftdevelopment.omiesales.domain.usecase.DeleteAllProductsUseCase
 import com.cesarsoftdevelopment.omiesales.domain.usecase.DeleteProductUseCase
 import com.cesarsoftdevelopment.omiesales.domain.usecase.GetProductsUseCase
 import com.cesarsoftdevelopment.omiesales.domain.usecase.GetSalesUseCase
@@ -30,6 +31,11 @@ class UseCaseModule {
     @Provides
     fun provideDeleteProductUseCase(productRepository: ProductRepository): DeleteProductUseCase {
         return DeleteProductUseCase(productRepository)
+    }
+
+    @Provides
+    fun provideDeleteAllProductsUseCase(productRepository: ProductRepository): DeleteAllProductsUseCase {
+        return DeleteAllProductsUseCase(productRepository)
     }
 
     @Provides

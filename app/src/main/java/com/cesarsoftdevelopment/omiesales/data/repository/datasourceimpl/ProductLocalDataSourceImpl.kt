@@ -30,6 +30,12 @@ class ProductLocalDataSourceImpl(
         }
     }
 
+    override suspend fun deleteAllProducts() {
+        withContext(ioDispatcher) {
+            productDao.deleteAllProducts()
+        }
+    }
+
     override suspend fun updateProductQuantity(productId: Int, newQuantity: Int) {
         TODO("Not yet implemented")
     }
