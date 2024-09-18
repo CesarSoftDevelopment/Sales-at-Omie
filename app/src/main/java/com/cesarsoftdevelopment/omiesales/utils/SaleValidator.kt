@@ -1,6 +1,7 @@
 package com.cesarsoftdevelopment.omiesales.utils
 
 import com.cesarsoftdevelopment.omiesales.data.model.Sale
+import com.cesarsoftdevelopment.omiesales.domain.model.Product
 
 object SaleValidator {
 
@@ -14,4 +15,9 @@ object SaleValidator {
         }
     }
 
+    fun calculateTotalValue(items: List<Product>) : Double {
+        return items.sumOf {
+            it.totalValue
+        }
+    }
 }

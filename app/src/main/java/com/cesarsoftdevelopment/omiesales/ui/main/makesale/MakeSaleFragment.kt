@@ -20,6 +20,7 @@ import com.cesarsoftdevelopment.omiesales.databinding.FragmentMakeSaleBinding
 import com.cesarsoftdevelopment.omiesales.domain.model.Product
 import com.cesarsoftdevelopment.omiesales.ui.main.MainActivity
 import com.cesarsoftdevelopment.omiesales.utils.FormatterUtil
+import com.cesarsoftdevelopment.omiesales.utils.SaleValidator
 import kotlinx.coroutines.launch
 import java.text.NumberFormat
 import java.util.Locale
@@ -34,6 +35,9 @@ class MakeSaleFragment : Fragment() {
     private var itemUnitValue = 0.0
     private var itemQuantity = 0
     private var itemValue = 0.0
+    private var listItemsQuantity = 0
+    private var totalOrderValue = 0.0
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -127,10 +131,16 @@ class MakeSaleFragment : Fragment() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun observeItemsList() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 makeSaleViewModel.items.collect { items ->
+                    listItemsQuantity = items.size
+                    totalOrderValue = SaleValidator.calculateTotalValue(items)
+
+                    binding.productQuantitySale.text = "Qt de itens: $listItemsQuantity"
+                    binding.totalSale.text = FormatterUtil.formatToBrazilianCurrency(totalOrderValue)
                     makeSaleAdapter.submitList(items)
                 }
             }
