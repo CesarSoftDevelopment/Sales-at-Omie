@@ -2,11 +2,13 @@ package com.cesarsoftdevelopment.omiesales.ui.main.makesale
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.cesarsoftdevelopment.omiesales.data.model.Sale
 import com.cesarsoftdevelopment.omiesales.domain.model.Product
 import com.cesarsoftdevelopment.omiesales.domain.usecase.DeleteAllProductsUseCase
 import com.cesarsoftdevelopment.omiesales.domain.usecase.DeleteProductUseCase
 import com.cesarsoftdevelopment.omiesales.domain.usecase.GetProductsUseCase
 import com.cesarsoftdevelopment.omiesales.domain.usecase.SaveProductUseCase
+import com.cesarsoftdevelopment.omiesales.domain.usecase.SaveSaleUseCase
 import com.cesarsoftdevelopment.omiesales.domain.usecase.UpdateProductQuantityUseCase
 import com.cesarsoftdevelopment.omiesales.utils.FormatterUtil
 import com.cesarsoftdevelopment.omiesales.utils.TextProvider
@@ -20,7 +22,7 @@ class MakeSaleViewModel(
     private val updateProductQuantityUseCase: UpdateProductQuantityUseCase,
     private val deleteProductUseCase: DeleteProductUseCase,
     private val deleteAllProductsUseCase : DeleteAllProductsUseCase,
-    private val saveSaleUseCase: SaveProductUseCase
+    private val saveSaleUseCase: SaveSaleUseCase
 ) : ViewModel() {
 
     private val _items  = MutableStateFlow<List<Product>>(emptyList())
@@ -93,7 +95,7 @@ class MakeSaleViewModel(
 
     }
 
-    fun validateToMakeSale(clientName : String, listSize : Int) : Boolean {
+    fun validateFieldsToMakeSale(clientName : String, listSize : Int) : Boolean {
 
         if(clientName.isBlank()) {
             _errorMessage.value = "Preencha o nome do cliente"
@@ -138,8 +140,8 @@ class MakeSaleViewModel(
     }
 
 
-    fun saveSale() {
-        //TODO
+    fun saveSale(sale: Sale) = viewModelScope.launch {
+        saveSaleUseCase.invoke(sale)
     }
 
 }

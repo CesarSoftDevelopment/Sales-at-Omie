@@ -7,6 +7,7 @@ import com.cesarsoftdevelopment.omiesales.domain.usecase.DeleteAllProductsUseCas
 import com.cesarsoftdevelopment.omiesales.domain.usecase.DeleteProductUseCase
 import com.cesarsoftdevelopment.omiesales.domain.usecase.GetProductsUseCase
 import com.cesarsoftdevelopment.omiesales.domain.usecase.SaveProductUseCase
+import com.cesarsoftdevelopment.omiesales.domain.usecase.SaveSaleUseCase
 import com.cesarsoftdevelopment.omiesales.domain.usecase.UpdateProductQuantityUseCase
 
 class MakeSaleViewModelFactory(
@@ -15,7 +16,7 @@ class MakeSaleViewModelFactory(
     private val updateProductQuantityUseCase: UpdateProductQuantityUseCase,
     private val deleteProductUseCase: DeleteProductUseCase,
     private val deleteAllProductsUseCase: DeleteAllProductsUseCase,
-    private val saveSaleUseCase: SaveProductUseCase
+    private val saveSaleUseCase: SaveSaleUseCase
 ) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {

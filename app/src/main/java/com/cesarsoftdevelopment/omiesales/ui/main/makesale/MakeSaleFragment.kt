@@ -1,6 +1,7 @@
 package com.cesarsoftdevelopment.omiesales.ui.main.makesale
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import androidx.fragment.app.viewModels
 import android.os.Bundle
 import android.text.Editable
@@ -13,11 +14,13 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.findNavController
 import com.cesarsoftdevelopment.omiesales.R
+import com.cesarsoftdevelopment.omiesales.data.model.Sale
 import com.cesarsoftdevelopment.omiesales.databinding.FragmentHomeBinding
 import com.cesarsoftdevelopment.omiesales.databinding.FragmentMakeSaleBinding
 import com.cesarsoftdevelopment.omiesales.domain.model.Product
@@ -25,6 +28,7 @@ import com.cesarsoftdevelopment.omiesales.ui.main.MainActivity
 import com.cesarsoftdevelopment.omiesales.ui.main.home.HomeFragmentDirections
 import com.cesarsoftdevelopment.omiesales.utils.FormatterUtil
 import com.cesarsoftdevelopment.omiesales.utils.SaleValidator
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import java.text.NumberFormat
 import java.util.Locale
@@ -41,6 +45,7 @@ class MakeSaleFragment : Fragment() {
     private var itemValue = 0.0
     private var listItemsQuantity = 0
     private var totalOrderValue = 0.0
+    private var listItems = listOf<Product>()
 
 
     override fun onCreateView(
@@ -144,6 +149,7 @@ class MakeSaleFragment : Fragment() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 makeSaleViewModel.items.collect { items ->
                     listItemsQuantity = items.size
+                    listItems = items
                     totalOrderValue = SaleValidator.calculateTotalValue(items)
 
                     binding.productQuantitySale.text = "Qt de itens: $listItemsQuantity"
@@ -182,7 +188,6 @@ class MakeSaleFragment : Fragment() {
                 val textValue = s.toString()
 
                 if(textValue != currentValue) {
-
                     binding.unitProductValue.removeTextChangedListener(this)
                     makeSaleViewModel.processUnitValue(textValue)
                     currentValue = unitValueFormatted
@@ -229,8 +234,20 @@ class MakeSaleFragment : Fragment() {
             val clientName = binding.clientName.text.toString()
             val listSize = listItemsQuantity
 
-            if(makeSaleViewModel.validateToMakeSale(clientName, listSize)) {
+            if(makeSaleViewModel.validateFieldsToMakeSale(clientName, listSize)) {
 
+                val sale = Sale(
+                    0,
+                    clientName,
+                    totalOrderValue,
+                    listItems,
+                )
+
+                makeSaleViewModel.saveSale(sale)
+                makeSaleViewModel.deleteAllProducts()
+                binding.clientName.text?.clear()
+                binding.clientName.isEnabled = true
+                showSnackBarWithAction()
             }
         }
     }
@@ -251,6 +268,7 @@ class MakeSaleFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        makeSaleViewModel.deleteAllProducts()
         _binding = null
     }
 
@@ -274,8 +292,27 @@ class MakeSaleFragment : Fragment() {
         alertDialog.show()
     }
 
-    private fun handleWhenCancelButtonIsClicked() {
+    private fun showSnackBarWithAction() {
 
+        val rootView = requireView()
+
+        val snackbar = Snackbar.make(
+            rootView,
+            "Venda feita com sucesso!",
+            Snackbar.LENGTH_LONG
+        )
+
+        snackbar.setAction("Voltar") {
+            navigateToHomeFragment()
+        }
+
+        snackbar.setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.green))
+        snackbar.setActionTextColor(Color.WHITE)
+        snackbar.show()
+
+    }
+
+    private fun handleWhenCancelButtonIsClicked() {
        binding.btnCancel.setOnClickListener {
            if(listItemsQuantity > 0) {
                createAlertDialog()
@@ -286,7 +323,6 @@ class MakeSaleFragment : Fragment() {
     }
 
     private fun handleOnBackPressed() {
-
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 if(listItemsQuantity > 0) {

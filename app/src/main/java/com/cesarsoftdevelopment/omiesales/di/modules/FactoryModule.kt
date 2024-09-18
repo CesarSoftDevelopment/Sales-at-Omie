@@ -5,6 +5,7 @@ import com.cesarsoftdevelopment.omiesales.domain.usecase.DeleteAllProductsUseCas
 import com.cesarsoftdevelopment.omiesales.domain.usecase.DeleteProductUseCase
 import com.cesarsoftdevelopment.omiesales.domain.usecase.GetProductsUseCase
 import com.cesarsoftdevelopment.omiesales.domain.usecase.SaveProductUseCase
+import com.cesarsoftdevelopment.omiesales.domain.usecase.SaveSaleUseCase
 import com.cesarsoftdevelopment.omiesales.domain.usecase.UpdateProductQuantityUseCase
 import com.cesarsoftdevelopment.omiesales.ui.main.makesale.MakeSaleViewModelFactory
 import dagger.Module
@@ -24,7 +25,7 @@ class FactoryModule {
         updateProductQuantityUseCase : UpdateProductQuantityUseCase,
         deleteProductUseCase : DeleteProductUseCase,
         deleteAllProductsUseCase: DeleteAllProductsUseCase,
-        saveSaleUseCase: SaveProductUseCase
+        saveSaleUseCase: SaveSaleUseCase
 
     ): MakeSaleViewModelFactory {
         return MakeSaleViewModelFactory(

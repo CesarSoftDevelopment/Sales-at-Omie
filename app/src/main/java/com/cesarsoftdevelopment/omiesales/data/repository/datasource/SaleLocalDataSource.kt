@@ -5,5 +5,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface SaleLocalDataSource {
     suspend fun saveSale(sale: Sale)
-    fun getProducts() : Flow<List<Sale>>
+    fun getSales() : Flow<List<Sale>>
 }
