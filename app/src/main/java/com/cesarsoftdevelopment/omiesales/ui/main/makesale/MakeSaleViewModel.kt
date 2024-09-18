@@ -28,11 +28,32 @@ class MakeSaleViewModel(
 
     private val _unitValue  = MutableStateFlow(0.0)
 
-    private val _itemValue = MutableStateFlow("R$ 0,00")
-    val itemValue : StateFlow<String> = _itemValue
+    private val _unitValueFormatted = MutableStateFlow("R$ 0,00")
+    val unitValueFormatted: StateFlow<String> = _unitValueFormatted
+
+    private val _itemValue = MutableStateFlow(0.0)
+    val itemValue : StateFlow<Double> = _itemValue
+
+    private val _itemValueFormatted = MutableStateFlow("R$ 0,00")
+    val itemValueFormatted : StateFlow<String> = _itemValueFormatted
 
     private val _errorMessage = MutableStateFlow("")
     val errorMessage: StateFlow<String> = _errorMessage
+
+    fun processUnitValue(textValue: String) {
+
+        val cleanString = textValue.replace("[^\\d]".toRegex(), "")
+
+        val parsed = cleanString.toDoubleOrNull() ?: 0.0
+
+        _unitValue.value = parsed
+
+        calculateTotal()
+
+        val formatted = FormatterUtil.formatToBrazilianCurrency(parsed)
+
+        _unitValueFormatted.value = formatted
+    }
 
 
     fun setQuantity(quantity: Int) {
@@ -40,14 +61,9 @@ class MakeSaleViewModel(
         calculateTotal()
     }
 
-    fun setUnitValue(unitValue: Double) {
-        _unitValue.value = unitValue
-        calculateTotal()
-    }
-
     private fun calculateTotal() {
         val total = _quantity.value * _unitValue.value
-        _itemValue.value = FormatterUtil.formatToBrazilianCurrency(total)
+        _itemValueFormatted.value = FormatterUtil.formatToBrazilianCurrency(total)
     }
 
 

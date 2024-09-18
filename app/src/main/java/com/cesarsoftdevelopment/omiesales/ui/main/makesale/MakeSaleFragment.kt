@@ -31,6 +31,8 @@ class MakeSaleFragment : Fragment() {
 
     private val binding get() = _binding!!
 
+    private var unitValueFormatted = ""
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -43,7 +45,8 @@ class MakeSaleFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setViewModel()
         setupTextWatchers()
-        observeTotalValue()
+        observeUnitValueFormatted()
+        observeItemValue()
         saveProduct()
         observeErrorMessage()
 
@@ -53,10 +56,88 @@ class MakeSaleFragment : Fragment() {
         makeSaleViewModel = (activity as MainActivity).makeSaleViewModel
     }
 
+
+    @SuppressLint("SetTextI18n")
+    private fun observeItemValue() {
+        lifecycleScope.launch  {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                makeSaleViewModel.itemValueFormatted.collect { formattedItemValue ->
+                    binding.itemValue.text = "Valor total do item: $formattedItemValue"
+                }
+            }
+        }
+    }
+
+    private fun observeErrorMessage() {
+        lifecycleScope.launch  {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                makeSaleViewModel.errorMessage.collect { message ->
+                    if (message.isNotBlank()) {
+                        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+                        makeSaleViewModel.clearErrorMessage()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun observeUnitValueFormatted() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                makeSaleViewModel.unitValueFormatted.collect { formattedValue ->
+                    unitValueFormatted = formattedValue
+                }
+            }
+        }
+
+    }
+
+    private fun setupTextWatchers() {
+
+        binding.productQuantity.addTextChangedListener(object : TextWatcher {
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                val quantity = s.toString().toIntOrNull() ?: 0
+                makeSaleViewModel.setQuantity(quantity)
+            }
+        })
+
+        binding.unitProductValue.addTextChangedListener(object : TextWatcher {
+
+            var currentValue = ""
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+
+                val textValue = s.toString()
+
+                if(textValue != currentValue) {
+
+                    binding.unitProductValue.removeTextChangedListener(this)
+                    makeSaleViewModel.processUnitValue(textValue)
+                    currentValue = unitValueFormatted
+
+                    binding.unitProductValue.setText(unitValueFormatted)
+                    binding.unitProductValue.setSelection(unitValueFormatted.length)
+                    binding.unitProductValue.addTextChangedListener(this)
+                }
+
+            }
+        })
+    }
+
     private fun saveProduct() {
+
         binding.btnInsert.setOnClickListener {
-            val clientName = binding.clientName.text.toString()
             val id = 0
+            val clientName = binding.clientName.text.toString()
             val productName = binding.productName.text.toString()
             val productQuantity = binding.productQuantity.text.toString().toIntOrNull() ?: 0
             val productUnitValue = binding.unitProductValue.text.toString().toDoubleOrNull() ?: 0.0
@@ -76,77 +157,7 @@ class MakeSaleFragment : Fragment() {
         }
     }
 
-    private fun observeErrorMessage() {
-        lifecycleScope.launch  {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                makeSaleViewModel.errorMessage.collect { message ->
-                    if (message.isNotBlank()) {
-                        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
-                        makeSaleViewModel.clearErrorMessage()
-                    }
-                }
-            }
-        }
-    }
 
-    @SuppressLint("SetTextI18n")
-    private fun observeTotalValue() {
-        lifecycleScope.launch  {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                makeSaleViewModel.itemValue.collect { formattedItemValue ->
-                    binding.itemValue.text = "Valor total do item: $formattedItemValue"
-                }
-            }
-        }
-    }
-
-    private fun setupTextWatchers() {
-
-        binding.productQuantity.addTextChangedListener(object : TextWatcher {
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-
-            override fun afterTextChanged(s: Editable?) {
-                val quantity = s.toString().toIntOrNull() ?: 0
-                makeSaleViewModel.setQuantity(quantity)
-            }
-        })
-
-        binding.unitProductValue.addTextChangedListener(object : TextWatcher {
-
-            var current = ""
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-
-            override fun afterTextChanged(s: Editable?) {
-
-                val textValue = s.toString()
-
-                if(textValue != current) {
-
-                    binding.unitProductValue.removeTextChangedListener(this)
-
-                    val cleanString = textValue.replace("[^\\d]".toRegex(), "")
-
-                    val parsed = cleanString.toDouble()
-
-                    makeSaleViewModel.setUnitValue(parsed)
-
-                    val formatted = FormatterUtil.formatToBrazilianCurrency(parsed)
-
-                    current = formatted
-                    binding.unitProductValue.setText(formatted)
-                    binding.unitProductValue.setSelection(formatted.length)
-                    binding.unitProductValue.addTextChangedListener(this)
-                }
-
-            }
-        })
-    }
 
 
     override fun onDestroyView() {
