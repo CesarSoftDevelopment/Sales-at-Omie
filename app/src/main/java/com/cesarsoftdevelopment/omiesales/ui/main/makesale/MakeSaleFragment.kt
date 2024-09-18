@@ -293,9 +293,7 @@ class MakeSaleFragment : Fragment() {
     }
 
     private fun showSnackBarWithAction() {
-
         val rootView = requireView()
-
         val snackbar = Snackbar.make(
             rootView,
             "Venda feita com sucesso!",

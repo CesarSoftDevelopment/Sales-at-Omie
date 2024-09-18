@@ -2,9 +2,11 @@ package com.cesarsoftdevelopment.omiesales.ui.main.makesale
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.cesarsoftdevelopment.omiesales.domain.model.Product
+import com.cesarsoftdevelopment.omiesales.domain.usecase.DeleteAllProductsUseCase
 import com.cesarsoftdevelopment.omiesales.domain.usecase.DeleteProductUseCase
 import com.cesarsoftdevelopment.omiesales.domain.usecase.GetProductsUseCase
 import com.cesarsoftdevelopment.omiesales.domain.usecase.SaveProductUseCase
+import com.cesarsoftdevelopment.omiesales.domain.usecase.SaveSaleUseCase
 import com.cesarsoftdevelopment.omiesales.domain.usecase.UpdateProductQuantityUseCase
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -28,12 +30,12 @@ class MakeSaleViewModelTest {
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     private lateinit var viewModel: MakeSaleViewModel
-
     private val saveProductUseCase = mockk<SaveProductUseCase>()
     private val getProductsUseCase = mockk<GetProductsUseCase>()
     private val updateProductQuantityUseCase = mockk<UpdateProductQuantityUseCase>()
     private val deleteProductUseCase = mockk<DeleteProductUseCase>()
-    private val saveSaleUseCase = mockk<SaveProductUseCase>()
+    private val deleteAllProductsUseCase= mockk<DeleteAllProductsUseCase>()
+    private val saveSaleUseCase = mockk<SaveSaleUseCase>()
 
 
     @Before
@@ -46,6 +48,7 @@ class MakeSaleViewModelTest {
             getProductsUseCase,
             updateProductQuantityUseCase,
             deleteProductUseCase,
+            deleteAllProductsUseCase,
             saveSaleUseCase
         )
     }
@@ -89,7 +92,7 @@ class MakeSaleViewModelTest {
 
         viewModel.getProducts()
 
-        assert(viewModel.products.value == productList)
+        assert(viewModel.items.value == productList)
     }
 
     @Test

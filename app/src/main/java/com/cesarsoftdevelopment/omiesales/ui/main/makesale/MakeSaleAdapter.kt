@@ -26,7 +26,7 @@ class MakeSaleAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder.from(parent)
+        return ViewHolder.from(parent, makeSaleViewModel)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -34,7 +34,8 @@ class MakeSaleAdapter(
     }
 
     class ViewHolder private constructor(
-        private val binding: ProductItemBinding
+        private val binding: ProductItemBinding,
+        private val makeSaleViewModel: MakeSaleViewModel
     ): RecyclerView.ViewHolder(binding.root) {
 
         @SuppressLint("SetTextI18n")
@@ -47,12 +48,15 @@ class MakeSaleAdapter(
             // botão somar
             // botão de dimininuir
             // deletar produto
+            binding.ibTrash.setOnClickListener {
+                makeSaleViewModel.deleteProduct(item.id)
+            }
 
         }
 
         companion object {
 
-            fun from(parent: ViewGroup): ViewHolder {
+            fun from(parent: ViewGroup, makeSaleViewModel: MakeSaleViewModel): ViewHolder {
 
                 val binding = ProductItemBinding.inflate(
                     LayoutInflater.from(parent.context),
@@ -61,7 +65,8 @@ class MakeSaleAdapter(
                 )
 
                 return ViewHolder(
-                    binding
+                    binding,
+                    makeSaleViewModel
                 )
             }
         }
