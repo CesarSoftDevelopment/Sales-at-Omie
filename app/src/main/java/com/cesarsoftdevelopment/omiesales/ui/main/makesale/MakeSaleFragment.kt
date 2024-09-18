@@ -66,6 +66,7 @@ class MakeSaleFragment : Fragment() {
         observeItemsList()
         handleOnBackPressed()
         handleWhenCancelButtonIsClicked()
+        saveSale()
     }
 
     private fun setViewModel() {
@@ -217,6 +218,19 @@ class MakeSaleFragment : Fragment() {
                 makeSaleViewModel.saveProduct(product)
                 makeSaleViewModel.getProducts()
                 clearFields()
+                binding.clientName.isEnabled = false
+            }
+        }
+    }
+
+
+    private fun saveSale() {
+        binding.btnSaveSale.setOnClickListener {
+            val clientName = binding.clientName.text.toString()
+            val listSize = listItemsQuantity
+
+            if(makeSaleViewModel.validateToMakeSale(clientName, listSize)) {
+
             }
         }
     }
@@ -229,7 +243,6 @@ class MakeSaleFragment : Fragment() {
     }
 
     private fun clearFields() {
-        binding.clientName.text?.clear()
         binding.productName.text?.clear()
         binding.productQuantity.text?.clear()
         binding.unitProductValue.text?.clear()

@@ -93,6 +93,22 @@ class MakeSaleViewModel(
 
     }
 
+    fun validateToMakeSale(clientName : String, listSize : Int) : Boolean {
+
+        if(clientName.isBlank()) {
+            _errorMessage.value = "Preencha o nome do cliente"
+            return false
+        }
+
+        if(listSize <= 0) {
+            _errorMessage.value = "Adicione um produto na lista"
+            return false
+        }
+
+        return true
+    }
+
+
     fun clearErrorMessage() {
         _errorMessage.value = ""
     }
