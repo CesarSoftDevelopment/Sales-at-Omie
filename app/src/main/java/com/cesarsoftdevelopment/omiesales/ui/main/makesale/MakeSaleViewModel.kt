@@ -21,12 +21,14 @@ class MakeSaleViewModel(
     private val saveSaleUseCase: SaveProductUseCase
 ) : ViewModel() {
 
-    private val _products  = MutableStateFlow<List<Product>>(emptyList())
-    val products : StateFlow<List<Product>> = _products
+    private val _items  = MutableStateFlow<List<Product>>(emptyList())
+    val items : StateFlow<List<Product>> = _items
 
     private val _quantity  = MutableStateFlow(0)
+    val quantity : StateFlow<Int> = _quantity
 
     private val _unitValue  = MutableStateFlow(0.0)
+    val unitValue : StateFlow<Double> = _unitValue
 
     private val _unitValueFormatted = MutableStateFlow("R$ 0,00")
     val unitValueFormatted: StateFlow<String> = _unitValueFormatted
@@ -64,6 +66,7 @@ class MakeSaleViewModel(
     private fun calculateTotal() {
         val total = _quantity.value * _unitValue.value
         _itemValueFormatted.value = FormatterUtil.formatToBrazilianCurrency(total)
+        _itemValue.value = total
     }
 
 
@@ -98,8 +101,8 @@ class MakeSaleViewModel(
 
     fun getProducts() {
         viewModelScope.launch {
-            getProductsUseCase.invoke().collect { productList ->
-                _products.value = productList
+            getProductsUseCase.invoke().collect { itemsList ->
+                _items.value = itemsList
             }
         }
     }

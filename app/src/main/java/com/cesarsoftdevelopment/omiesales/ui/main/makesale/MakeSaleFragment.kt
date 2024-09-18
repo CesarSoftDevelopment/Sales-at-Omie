@@ -5,6 +5,7 @@ import androidx.fragment.app.viewModels
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -26,12 +27,13 @@ import java.util.Locale
 class MakeSaleFragment : Fragment() {
 
     private lateinit var makeSaleViewModel : MakeSaleViewModel
-
+    private lateinit var makeSaleAdapter: MakeSaleAdapter
     private var _binding: FragmentMakeSaleBinding? = null
-
     private val binding get() = _binding!!
-
     private var unitValueFormatted = ""
+    private var itemUnitValue = 0.0
+    private var itemQuantity = 0
+    private var itemValue = 0.0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,10 +48,14 @@ class MakeSaleFragment : Fragment() {
         setViewModel()
         setupTextWatchers()
         observeUnitValueFormatted()
+        observeItemValueFormatted()
+        observeItemQuantity()
+        observeUnitValue()
         observeItemValue()
         saveProduct()
         observeErrorMessage()
-
+        setAdapter()
+        observeItemsList()
     }
 
     private fun setViewModel() {
@@ -58,7 +64,7 @@ class MakeSaleFragment : Fragment() {
 
 
     @SuppressLint("SetTextI18n")
-    private fun observeItemValue() {
+    private fun observeItemValueFormatted() {
         lifecycleScope.launch  {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 makeSaleViewModel.itemValueFormatted.collect { formattedItemValue ->
@@ -89,8 +95,48 @@ class MakeSaleFragment : Fragment() {
                 }
             }
         }
-
     }
+
+    private fun observeItemQuantity() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                makeSaleViewModel.quantity.collect { quantity ->
+                    itemQuantity = quantity
+                }
+            }
+        }
+    }
+
+    private fun observeUnitValue() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                makeSaleViewModel.unitValue.collect { unitValue ->
+                    itemUnitValue = unitValue
+                }
+            }
+        }
+    }
+
+    private fun observeItemValue() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                makeSaleViewModel.itemValue.collect { value ->
+                    itemValue = value
+                }
+            }
+        }
+    }
+
+    private fun observeItemsList() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                makeSaleViewModel.items.collect { items ->
+                    makeSaleAdapter.submitList(items)
+                }
+            }
+        }
+    }
+
 
     private fun setupTextWatchers() {
 
@@ -139,9 +185,9 @@ class MakeSaleFragment : Fragment() {
             val id = 0
             val clientName = binding.clientName.text.toString()
             val productName = binding.productName.text.toString()
-            val productQuantity = binding.productQuantity.text.toString().toIntOrNull() ?: 0
-            val productUnitValue = binding.unitProductValue.text.toString().toDoubleOrNull() ?: 0.0
-            val productTotalValue = productUnitValue * productQuantity
+            val productQuantity = itemQuantity
+            val productUnitValue = itemUnitValue
+            val productTotalValue = itemValue
 
             val product = Product(
                 id,
@@ -153,11 +199,25 @@ class MakeSaleFragment : Fragment() {
 
             if (makeSaleViewModel.isValidField(clientName, product)) {
                 makeSaleViewModel.saveProduct(product)
+                makeSaleViewModel.getProducts()
+                clearFields()
             }
         }
     }
 
+    private fun setAdapter() {
+        makeSaleAdapter = MakeSaleAdapter(makeSaleViewModel)
+        binding.recyclerItems.apply {
+            adapter = makeSaleAdapter
+        }
+    }
 
+    private fun clearFields() {
+        binding.clientName.text?.clear()
+        binding.productName.text?.clear()
+        binding.productQuantity.text?.clear()
+        binding.unitProductValue.text?.clear()
+    }
 
 
     override fun onDestroyView() {

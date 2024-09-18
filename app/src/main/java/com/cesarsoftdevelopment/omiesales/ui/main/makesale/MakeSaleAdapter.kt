@@ -1,5 +1,6 @@
 package com.cesarsoftdevelopment.omiesales.ui.main.makesale
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -36,11 +37,12 @@ class MakeSaleAdapter(
         private val binding: ProductItemBinding
     ): RecyclerView.ViewHolder(binding.root) {
 
+        @SuppressLint("SetTextI18n")
         fun bind(item : Product) {
             binding.productName.text = item.productName
             binding.productQuantity.text = item.quantity.toString()
-            binding.productUnitValue.text = FormatterUtil.formatToBrazilianCurrency(item.unitValue)
-            binding.productTotalValue.text = FormatterUtil.formatToBrazilianCurrency(item.totalValue)
+            binding.productUnitValue.text = "Valor unitário: ${FormatterUtil.formatToBrazilianCurrency(item.unitValue)}"
+            binding.productTotalValue.text = "Valor total: ${FormatterUtil.formatToBrazilianCurrency(item.totalValue)}"
 
             // botão somar
             // botão de dimininuir
