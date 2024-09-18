@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -63,6 +64,7 @@ class MakeSaleFragment : Fragment() {
         observeErrorMessage()
         setAdapter()
         observeItemsList()
+        handleOnBackPressed()
         handleWhenCancelButtonIsClicked()
     }
 
@@ -268,6 +270,19 @@ class MakeSaleFragment : Fragment() {
                navigateToHomeFragment()
            }
        }
+    }
+
+    private fun handleOnBackPressed() {
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if(listItemsQuantity > 0) {
+                    createAlertDialog()
+                }else {
+                    navigateToHomeFragment()
+                }
+            }
+        })
     }
 
     private fun navigateToHomeFragment() {
