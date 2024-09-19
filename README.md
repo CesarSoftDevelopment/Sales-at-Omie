@@ -6,6 +6,9 @@
 O aplicativo foi desenvolvido usando Kotlin em MVVM + Clean architecture, seguindo as boas 
 práticas de desenvolvimento android.
 
+O projeto tem 3 branches main, xml-project, compose-project. A branch xml-project foi onde criei
+o projeto e mesclei para a main. A branch compose-project é para refatoração no projeto.
+
 Algumas das tecnologias utilizadas no projeto foram:
 
 - Dagger Hilt para injeção de dependência
