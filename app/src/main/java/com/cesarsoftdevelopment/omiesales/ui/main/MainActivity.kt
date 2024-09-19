@@ -2,13 +2,10 @@ package com.cesarsoftdevelopment.omiesales.ui.main
 
 import android.os.Bundle
 import androidx.activity.viewModels
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
 import com.cesarsoftdevelopment.omiesales.R
 import com.cesarsoftdevelopment.omiesales.databinding.ActivityMainBinding
 import com.cesarsoftdevelopment.omiesales.ui.main.makesale.MakeSaleViewModel
@@ -47,10 +44,15 @@ class MainActivity : AppCompatActivity() {
         val appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.navigation_home,
-                R.id.navigation_make_sale,
-                R.id.navigation_sale_history
+                R.id.navigation_make_sale
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
     }
+
+    override fun onSupportNavigateUp(): Boolean {
+        val navController = findNavController(R.id.nav_host_fragment_activity_main)
+        return navController.navigateUp() || super.onSupportNavigateUp()
+    }
+
 }

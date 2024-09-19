@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.cesarsoftdevelopment.omiesales.data.model.Sale
 import com.cesarsoftdevelopment.omiesales.databinding.SaleItemBinding
 import com.cesarsoftdevelopment.omiesales.domain.model.Product
+import com.cesarsoftdevelopment.omiesales.utils.FormatterUtil
 
 class SalesHistoryAdapter(
     private val onClickListener: OnClickListener
@@ -53,6 +54,7 @@ class SalesHistoryAdapter(
         fun bind(item : Sale) {
             binding.orderNumber.text = "Número do pedido: ${item.saleId}"
             binding.clientName.text = "Cliente: ${item.clientName}"
+            binding.totalOrder.text = "Total do pedido: ${FormatterUtil.formatToBrazilianCurrency(item.totalPrice)}"
 
         }
 

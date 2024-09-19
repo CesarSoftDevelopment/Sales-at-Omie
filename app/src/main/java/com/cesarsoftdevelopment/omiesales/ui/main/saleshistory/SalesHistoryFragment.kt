@@ -10,10 +10,12 @@ import android.view.ViewGroup
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.findNavController
 import com.cesarsoftdevelopment.omiesales.data.model.Sale
 import com.cesarsoftdevelopment.omiesales.databinding.FragmentSalesHistoryBinding
 import com.cesarsoftdevelopment.omiesales.domain.model.Product
 import com.cesarsoftdevelopment.omiesales.ui.main.MainActivity
+import com.cesarsoftdevelopment.omiesales.ui.main.makesale.MakeSaleFragmentDirections
 import com.cesarsoftdevelopment.omiesales.ui.main.makesale.MakeSaleViewModel
 import com.cesarsoftdevelopment.omiesales.utils.FormatterUtil
 import com.cesarsoftdevelopment.omiesales.utils.SaleValidator
@@ -63,11 +65,19 @@ class SalesHistoryFragment : Fragment() {
     private fun setAdapter() {
 
         salesHistoryAdapter = SalesHistoryAdapter(SalesHistoryAdapter.OnClickListener { products ->
-
+            navigateToSalesProducts(products)
         })
 
         binding.recyclerSales.adapter = salesHistoryAdapter
 
+    }
+
+    private fun navigateToSalesProducts(products : List<Product>) {
+        requireView().findNavController().navigate(
+            SalesHistoryFragmentDirections.actionNavigationSaleHistoryToSaleProductsFragment(
+                products.toTypedArray()
+            )
+        )
     }
 
     private fun setViewModel() {

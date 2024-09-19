@@ -36,5 +36,18 @@
         <action
             android:id="@+id/action_navigation_sale_history_to_navigation_home"
             app:destination="@id/navigation_home" />
+        <action
+            android:id="@+id/action_navigation_sale_history_to_saleProductsFragment"
+            app:destination="@id/navigation_sale_products" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_sale_products"
+        android:name="com.cesarsoftdevelopment.omiesales.ui.main.salesproducts.SaleProductsFragment"
+        android:label="@string/order_items"
+        tools:layout="@layout/fragment_sale_products" >
+        <argument
+            android:name="productList"
+            app:argType="com.cesarsoftdevelopment.omiesales.domain.model.Product[]" />
     </fragment>
 </navigation>

@@ -43,7 +43,7 @@ class SalesProductAdapter : ListAdapter<Product, SalesProductAdapter.ViewHolder>
             binding.productName.text = item.productName
             binding.productQuantity.text = "Qtde produtos: ${item.quantity}"
             binding.productUnitValue.text = "Valor unitário: ${FormatterUtil.formatToBrazilianCurrency(item.unitValue)}"
-            binding.productUnitValue.text = "Valor total: ${FormatterUtil.formatToBrazilianCurrency(item.totalValue)}"
+            binding.productTotalValue.text = "Valor total do item: ${FormatterUtil.formatToBrazilianCurrency(item.totalValue)}"
         }
 
         companion object {
