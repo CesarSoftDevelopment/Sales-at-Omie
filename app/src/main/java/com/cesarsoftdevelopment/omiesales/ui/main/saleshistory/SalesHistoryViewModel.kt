@@ -4,11 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cesarsoftdevelopment.omiesales.data.model.Sale
 import com.cesarsoftdevelopment.omiesales.domain.usecase.GetSalesUseCase
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 class SalesHistoryViewModel (private val getSalesUseCase: GetSalesUseCase): ViewModel() {
 

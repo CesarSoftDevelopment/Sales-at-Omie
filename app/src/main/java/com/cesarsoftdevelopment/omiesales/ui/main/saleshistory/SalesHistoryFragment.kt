@@ -1,7 +1,6 @@
 package com.cesarsoftdevelopment.omiesales.ui.main.saleshistory
 
 import android.annotation.SuppressLint
-import androidx.fragment.app.viewModels
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,14 +10,11 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.findNavController
-import com.cesarsoftdevelopment.omiesales.data.model.Sale
 import com.cesarsoftdevelopment.omiesales.databinding.FragmentSalesHistoryBinding
 import com.cesarsoftdevelopment.omiesales.domain.model.Product
 import com.cesarsoftdevelopment.omiesales.ui.main.MainActivity
-import com.cesarsoftdevelopment.omiesales.ui.main.makesale.MakeSaleFragmentDirections
-import com.cesarsoftdevelopment.omiesales.ui.main.makesale.MakeSaleViewModel
 import com.cesarsoftdevelopment.omiesales.utils.FormatterUtil
-import com.cesarsoftdevelopment.omiesales.utils.SaleValidator
+import com.cesarsoftdevelopment.omiesales.utils.SaleCalculator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -54,7 +50,7 @@ class SalesHistoryFragment : Fragment() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 salesHistoryViewModel.sales.collect { salesList ->
-                    val totalSales = SaleValidator.calculateTotalSales(salesList)
+                    val totalSales = SaleCalculator.calculateTotalSales(salesList)
                     binding.totalSales.text = "Total de vendas: ${FormatterUtil.formatToBrazilianCurrency(totalSales)}"
                     salesHistoryAdapter.submitList(salesList)
                 }

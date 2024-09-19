@@ -4,7 +4,6 @@ import com.cesarsoftdevelopment.omiesales.data.database.ProductDao
 import com.cesarsoftdevelopment.omiesales.data.model.ProductEntity
 import com.cesarsoftdevelopment.omiesales.data.repository.datasource.ProductLocalDataSource
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 

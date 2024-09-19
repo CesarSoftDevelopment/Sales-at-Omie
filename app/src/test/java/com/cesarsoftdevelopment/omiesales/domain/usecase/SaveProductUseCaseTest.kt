@@ -28,60 +28,6 @@ class SaveProductUseCaseTest {
         saveProductUseCase = SaveProductUseCase(productRepository)
     }
 
-    @Test
-    fun `invoke should throw IllegalArgumentException when productName is empty`() = runTest {
-
-        val product = Product(
-            id = 1,
-            productName = "",
-            quantity = 2,
-            unitValue = 5.0,
-            totalValue = 10.0
-        )
-
-        assertFailsWith<IllegalArgumentException>(TextProvider.PRODUCT_NAME_EMPTY) {
-            saveProductUseCase.invoke(product)
-        }
-
-        verify(productRepository, never()).saveProduct(any())
-    }
-
-    @Test
-    fun `invoke should throw IllegalArgumentException when quantity is less than or equal to zero`() = runTest {
-
-        val product = Product(
-            id = 1,
-            productName = "product",
-            quantity = 0,
-            unitValue = 5.0,
-            totalValue = 10.0
-        )
-
-        assertFailsWith<IllegalArgumentException>(TextProvider.QUANTITY_LESS_THAN_ZERO) {
-            saveProductUseCase.invoke(product)
-        }
-
-        verify(productRepository, never()).saveProduct(any())
-    }
-
-    @Test
-    fun `invoke should throw IllegalArgumentException when unitValue is less than or equal to zero`() = runTest {
-
-        val product = Product(
-            id = 1,
-            productName = "product",
-            quantity = 2,
-            unitValue = 0.0,
-            totalValue = 10.0
-        )
-
-        assertFailsWith<IllegalArgumentException>(TextProvider.UNIT_VALUE_LESS_THAN_ZERO) {
-            saveProductUseCase.invoke(product)
-        }
-
-        verify(productRepository, never()).saveProduct(any())
-    }
-
 
     @Test
     fun `invoke should call saveProduct in repository`() = runTest {

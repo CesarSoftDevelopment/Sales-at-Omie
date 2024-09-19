@@ -2,11 +2,9 @@ package com.cesarsoftdevelopment.omiesales.ui.main.makesale
 
 import android.annotation.SuppressLint
 import android.graphics.Color
-import androidx.fragment.app.viewModels
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -21,20 +19,15 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.findNavController
 import com.cesarsoftdevelopment.omiesales.R
 import com.cesarsoftdevelopment.omiesales.data.model.Sale
-import com.cesarsoftdevelopment.omiesales.databinding.FragmentHomeBinding
 import com.cesarsoftdevelopment.omiesales.databinding.FragmentMakeSaleBinding
 import com.cesarsoftdevelopment.omiesales.domain.model.Product
 import com.cesarsoftdevelopment.omiesales.ui.main.MainActivity
-import com.cesarsoftdevelopment.omiesales.ui.main.home.HomeFragmentDirections
 import com.cesarsoftdevelopment.omiesales.utils.FormatterUtil
-import com.cesarsoftdevelopment.omiesales.utils.SaleValidator
+import com.cesarsoftdevelopment.omiesales.utils.SaleCalculator
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
-import java.text.NumberFormat
-import java.util.Locale
 
 class MakeSaleFragment : Fragment() {
-
     private lateinit var makeSaleViewModel : MakeSaleViewModel
     private lateinit var makeSaleAdapter: MakeSaleAdapter
     private var _binding: FragmentMakeSaleBinding? = null
@@ -77,7 +70,6 @@ class MakeSaleFragment : Fragment() {
     private fun setViewModel() {
         makeSaleViewModel = (activity as MainActivity).makeSaleViewModel
     }
-
 
     @SuppressLint("SetTextI18n")
     private fun observeItemValueFormatted() {
@@ -150,7 +142,7 @@ class MakeSaleFragment : Fragment() {
                 makeSaleViewModel.items.collect { items ->
                     listItemsQuantity = items.size
                     listItems = items
-                    totalOrderValue = SaleValidator.calculateTotalProducts(items)
+                    totalOrderValue = SaleCalculator.calculateTotalProducts(items)
 
                     binding.productQuantitySale.text = "Qt de itens: $listItemsQuantity"
                     binding.totalSale.text = "Valor total: ${FormatterUtil.formatToBrazilianCurrency(totalOrderValue)}"
@@ -159,7 +151,6 @@ class MakeSaleFragment : Fragment() {
             }
         }
     }
-
 
     private fun setupTextWatchers() {
 
@@ -228,21 +219,18 @@ class MakeSaleFragment : Fragment() {
         }
     }
 
-
     private fun saveSale() {
         binding.btnSaveSale.setOnClickListener {
             val clientName = binding.clientName.text.toString()
             val listSize = listItemsQuantity
 
             if(makeSaleViewModel.validateFieldsToMakeSale(clientName, listSize)) {
-
                 val sale = Sale(
                     0,
                     clientName,
                     totalOrderValue,
                     listItems,
                 )
-
                 makeSaleViewModel.saveSale(sale)
                 makeSaleViewModel.deleteAllProducts()
                 binding.clientName.text?.clear()
@@ -275,11 +263,9 @@ class MakeSaleFragment : Fragment() {
             navigateToHomeFragment()
         }
 
-
         builder.setNegativeButton("Não") { dialog, which ->
             dialog.dismiss()
         }
-
 
         val alertDialog = builder.create()
         alertDialog.show()
@@ -287,11 +273,7 @@ class MakeSaleFragment : Fragment() {
 
     private fun showSnackBarWithAction() {
         val rootView = requireView()
-        val snackbar = Snackbar.make(
-            rootView,
-            "Venda feita com sucesso!",
-            Snackbar.LENGTH_LONG
-        )
+        val snackbar = Snackbar.make(rootView, "Venda feita com sucesso!", Snackbar.LENGTH_LONG)
 
         snackbar.setAction("Voltar") {
             navigateToHomeFragment()
@@ -300,7 +282,6 @@ class MakeSaleFragment : Fragment() {
         snackbar.setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.green))
         snackbar.setActionTextColor(Color.WHITE)
         snackbar.show()
-
     }
 
     private fun handleWhenCancelButtonIsClicked() {

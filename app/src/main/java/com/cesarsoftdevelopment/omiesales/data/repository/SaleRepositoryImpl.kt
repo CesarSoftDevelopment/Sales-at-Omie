@@ -2,7 +2,6 @@ package com.cesarsoftdevelopment.omiesales.data.repository
 
 import com.cesarsoftdevelopment.omiesales.data.model.Sale
 import com.cesarsoftdevelopment.omiesales.data.repository.datasource.SaleLocalDataSource
-import com.cesarsoftdevelopment.omiesales.domain.model.asLocalProduct
 import com.cesarsoftdevelopment.omiesales.domain.repository.SaleRepository
 import kotlinx.coroutines.flow.Flow
 

@@ -1,6 +1,5 @@
 package com.cesarsoftdevelopment.omiesales.ui.main.makesale
 
-import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.cesarsoftdevelopment.omiesales.domain.usecase.DeleteAllProductsUseCase
