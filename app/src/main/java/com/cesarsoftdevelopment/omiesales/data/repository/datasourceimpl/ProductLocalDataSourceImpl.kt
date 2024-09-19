@@ -37,6 +37,8 @@ class ProductLocalDataSourceImpl(
     }
 
     override suspend fun updateProductQuantity(productId: Int, newQuantity: Int) {
-        TODO("Not yet implemented")
+        withContext(ioDispatcher) {
+            productDao.updateProductQuantity(productId, newQuantity)
+        }
     }
 }

@@ -45,9 +45,7 @@ class MakeSaleAdapter(
             binding.productUnitValue.text = "Valor unitário: ${FormatterUtil.formatToBrazilianCurrency(item.unitValue)}"
             binding.productTotalValue.text = "Valor total: ${FormatterUtil.formatToBrazilianCurrency(item.totalValue)}"
 
-            // botão somar
-            // botão de dimininuir
-            // deletar produto
+
             binding.ibTrash.setOnClickListener {
                 makeSaleViewModel.deleteProduct(item.id)
             }

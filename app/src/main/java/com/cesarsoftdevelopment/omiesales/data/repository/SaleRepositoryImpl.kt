@@ -15,7 +15,7 @@ class SaleRepositoryImpl(
     }
 
     override fun getSales(): Flow<List<Sale>> {
-        TODO("Not yet implemented")
+        return saleLocalDataSource.getSales()
     }
 
 

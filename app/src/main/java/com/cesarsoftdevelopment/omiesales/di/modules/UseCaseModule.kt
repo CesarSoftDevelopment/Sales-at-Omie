@@ -52,4 +52,5 @@ class UseCaseModule {
     fun provideSaveSaleUseCase(salesRepository: SaleRepository): SaveSaleUseCase {
         return SaveSaleUseCase(salesRepository)
     }
+
 }

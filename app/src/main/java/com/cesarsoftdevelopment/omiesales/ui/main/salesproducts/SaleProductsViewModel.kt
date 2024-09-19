@@ -1,4 +1,4 @@
-package com.cesarsoftdevelopment.omiesales.ui.main
+package com.cesarsoftdevelopment.omiesales.ui.main.salesproducts
 
 import androidx.lifecycle.ViewModel
 

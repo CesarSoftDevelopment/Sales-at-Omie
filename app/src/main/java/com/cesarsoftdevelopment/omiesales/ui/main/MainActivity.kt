@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -12,6 +13,8 @@ import com.cesarsoftdevelopment.omiesales.R
 import com.cesarsoftdevelopment.omiesales.databinding.ActivityMainBinding
 import com.cesarsoftdevelopment.omiesales.ui.main.makesale.MakeSaleViewModel
 import com.cesarsoftdevelopment.omiesales.ui.main.makesale.MakeSaleViewModelFactory
+import com.cesarsoftdevelopment.omiesales.ui.main.saleshistory.SalesHistoryViewModel
+import com.cesarsoftdevelopment.omiesales.ui.main.saleshistory.SalesHistoryViewModelFactory
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -25,6 +28,13 @@ class MainActivity : AppCompatActivity() {
 
     val makeSaleViewModel : MakeSaleViewModel by viewModels {
         makeSaleViewModelFactory
+    }
+
+    @Inject
+    lateinit var salesHistoryViewModelFactory : SalesHistoryViewModelFactory
+
+    val salesHistoryViewModel: SalesHistoryViewModel by viewModels {
+        salesHistoryViewModelFactory
     }
 
 

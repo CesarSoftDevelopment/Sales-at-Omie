@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.cesarsoftdevelopment.omiesales.data.model.Sale
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface SaleDao {
@@ -12,5 +13,5 @@ interface SaleDao {
     suspend fun insertSale(sale: Sale): Long
 
     @Query("SELECT * FROM sale")
-    suspend fun getAllSales(): List<Sale>
+    fun getAllSales(): Flow<List<Sale>>
 }

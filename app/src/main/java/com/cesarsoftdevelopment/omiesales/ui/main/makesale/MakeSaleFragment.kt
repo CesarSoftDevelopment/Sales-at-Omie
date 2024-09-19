@@ -150,7 +150,7 @@ class MakeSaleFragment : Fragment() {
                 makeSaleViewModel.items.collect { items ->
                     listItemsQuantity = items.size
                     listItems = items
-                    totalOrderValue = SaleValidator.calculateTotalValue(items)
+                    totalOrderValue = SaleValidator.calculateTotalProducts(items)
 
                     binding.productQuantitySale.text = "Qt de itens: $listItemsQuantity"
                     binding.totalSale.text = "Valor total: ${FormatterUtil.formatToBrazilianCurrency(totalOrderValue)}"
@@ -265,13 +265,6 @@ class MakeSaleFragment : Fragment() {
         binding.unitProductValue.text?.clear()
     }
 
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        makeSaleViewModel.deleteAllProducts()
-        _binding = null
-    }
-
     private fun createAlertDialog() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("Cancelar pedido.")
@@ -336,6 +329,12 @@ class MakeSaleFragment : Fragment() {
         requireView().findNavController().navigate(
             MakeSaleFragmentDirections.actionNavigationMakeSaleToNavigationHome()
         )
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        makeSaleViewModel.deleteAllProducts()
+        _binding = null
     }
 
 }

@@ -1,4 +1,4 @@
-package com.cesarsoftdevelopment.omiesales.ui.main.saleshistory
+package com.cesarsoftdevelopment.omiesales.ui.main.salesproducts
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -10,7 +10,9 @@ import com.cesarsoftdevelopment.omiesales.databinding.SaleProductItemBinding
 import com.cesarsoftdevelopment.omiesales.domain.model.Product
 import com.cesarsoftdevelopment.omiesales.utils.FormatterUtil
 
-class SalesProductAdapter : ListAdapter<Product, SalesProductAdapter.ViewHolder>(SalesProductDiffCallback())  {
+class SalesProductAdapter : ListAdapter<Product, SalesProductAdapter.ViewHolder>(
+    SalesProductDiffCallback()
+)  {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder.from(parent)

@@ -15,9 +15,16 @@ object SaleValidator {
         }
     }
 
-    fun calculateTotalValue(items: List<Product>) : Double {
+    fun calculateTotalProducts(items: List<Product>) : Double {
         return items.sumOf {
             it.totalValue
         }
     }
+
+    fun calculateTotalSales(items: List<Sale>) : Double {
+        return items.sumOf {
+            it.totalPrice
+        }
+    }
+
 }
