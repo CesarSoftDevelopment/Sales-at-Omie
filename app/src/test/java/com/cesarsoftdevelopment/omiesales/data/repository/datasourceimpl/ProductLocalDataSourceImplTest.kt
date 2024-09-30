@@ -83,19 +83,17 @@ class ProductLocalDataSourceImplTest {
     @Test
     fun `updateProductQuantity should call update method of dao`() = runTest {
 
-        val productId = ProductEntity(
+        val product = ProductEntity(
             id = 1,
             productName = "Test Product",
             quantity = 1,
             unitValue = 10.0,
             totalValue = 10.0
-        ).id
+        )
 
-        val newQuantity = 10
+        productDao.updateProduct(product)
 
-        productDao.updateProductQuantity(productId, newQuantity)
-
-        verify(productDao).updateProductQuantity(productId, newQuantity)
+        verify(productDao).updateProduct(product)
     }
 
 }

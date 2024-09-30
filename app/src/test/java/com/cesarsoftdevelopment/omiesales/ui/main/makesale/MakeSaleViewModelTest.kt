@@ -7,14 +7,13 @@ import com.cesarsoftdevelopment.omiesales.domain.usecase.DeleteProductUseCase
 import com.cesarsoftdevelopment.omiesales.domain.usecase.GetProductsUseCase
 import com.cesarsoftdevelopment.omiesales.domain.usecase.SaveProductUseCase
 import com.cesarsoftdevelopment.omiesales.domain.usecase.SaveSaleUseCase
-import com.cesarsoftdevelopment.omiesales.domain.usecase.UpdateProductQuantityUseCase
+import com.cesarsoftdevelopment.omiesales.domain.usecase.UpdateProductUseCase
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
@@ -32,7 +31,7 @@ class MakeSaleViewModelTest {
     private lateinit var viewModel: MakeSaleViewModel
     private val saveProductUseCase = mockk<SaveProductUseCase>()
     private val getProductsUseCase = mockk<GetProductsUseCase>()
-    private val updateProductQuantityUseCase = mockk<UpdateProductQuantityUseCase>()
+    private val updateProductUseCase = mockk<UpdateProductUseCase>()
     private val deleteProductUseCase = mockk<DeleteProductUseCase>()
     private val deleteAllProductsUseCase= mockk<DeleteAllProductsUseCase>()
     private val saveSaleUseCase = mockk<SaveSaleUseCase>()
@@ -46,7 +45,7 @@ class MakeSaleViewModelTest {
         viewModel = MakeSaleViewModel(
             saveProductUseCase,
             getProductsUseCase,
-            updateProductQuantityUseCase,
+            updateProductUseCase,
             deleteProductUseCase,
             deleteAllProductsUseCase,
             saveSaleUseCase
@@ -96,17 +95,22 @@ class MakeSaleViewModelTest {
     }
 
     @Test
-    fun `updateProduct should call updateProductQuantityUseCase`()  {
+    fun `updateProduct should call updateProductUseCase`()  {
 
-        val productId = 1
-        val newQuantity = 5
+        val product = Product(
+            1,
+            "Test Product",
+            1,
+            10.0,
+            10.0
+        )
 
-        coEvery { updateProductQuantityUseCase.invoke(productId, newQuantity) } returns Unit
+        coEvery { updateProductUseCase.invoke(product) } returns Unit
 
-        viewModel.updateProduct(productId, newQuantity)
+        viewModel.updateProduct(product)
 
         coVerify {
-            updateProductQuantityUseCase.invoke(productId, newQuantity)
+            updateProductUseCase.invoke(product)
         }
     }
 

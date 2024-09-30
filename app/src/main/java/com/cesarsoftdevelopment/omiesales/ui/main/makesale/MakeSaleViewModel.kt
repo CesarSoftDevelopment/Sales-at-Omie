@@ -9,7 +9,7 @@ import com.cesarsoftdevelopment.omiesales.domain.usecase.DeleteProductUseCase
 import com.cesarsoftdevelopment.omiesales.domain.usecase.GetProductsUseCase
 import com.cesarsoftdevelopment.omiesales.domain.usecase.SaveProductUseCase
 import com.cesarsoftdevelopment.omiesales.domain.usecase.SaveSaleUseCase
-import com.cesarsoftdevelopment.omiesales.domain.usecase.UpdateProductQuantityUseCase
+import com.cesarsoftdevelopment.omiesales.domain.usecase.UpdateProductUseCase
 import com.cesarsoftdevelopment.omiesales.utils.FormatterUtil
 import com.cesarsoftdevelopment.omiesales.utils.TextProvider
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 class MakeSaleViewModel(
     private val saveProductUseCase: SaveProductUseCase,
     private val getProductsUseCase: GetProductsUseCase,
-    private val updateProductQuantityUseCase: UpdateProductQuantityUseCase,
+    private val updateProductUseCase: UpdateProductUseCase,
     private val deleteProductUseCase: DeleteProductUseCase,
     private val deleteAllProductsUseCase : DeleteAllProductsUseCase,
     private val saveSaleUseCase: SaveSaleUseCase
@@ -127,8 +127,30 @@ class MakeSaleViewModel(
         }
     }
 
-    fun updateProduct(productId : Int, newQuantity : Int) = viewModelScope.launch {
-       updateProductQuantityUseCase.invoke(productId, newQuantity)
+    fun updateProduct(product: Product, isSum : Boolean) = viewModelScope.launch {
+
+        var quantity = product.quantity
+
+        if(isSum) {
+            quantity += 1
+        }else {
+            if (quantity > 1) {
+                quantity -= 1
+            }
+        }
+
+
+        val totalValue = (product.unitValue * quantity)
+
+        val item = Product(
+            product.id,
+            product.productName,
+            quantity,
+            product.unitValue,
+            totalValue
+        )
+
+        updateProductUseCase.invoke(item)
     }
 
     fun deleteProduct(productId : Int) = viewModelScope.launch {

@@ -77,15 +77,20 @@ class ProductRepositoryImplTest {
     }
 
     @Test
-    fun `updateProductQuantity should call updateProductQuantity in local data source`() = runTest {
+    fun `updateProduct should call updateProduct in local data source`() = runTest {
 
-        val productId = 1
+        val product = Product(
+            id = 1,
+            productName =
+            "Test Product",
+            quantity = 1,
+            unitValue = 10.0,
+            totalValue = 10.0
+        )
 
-        val newQuantity = 15
+        productRepository.updateProduct(product)
 
-        productRepository.updateProductQuantity(productId, newQuantity)
-
-        verify(productLocalDataSource).updateProductQuantity(productId, newQuantity)
+        verify(productLocalDataSource).updateProduct(product.asLocalProduct())
     }
 
     @Test

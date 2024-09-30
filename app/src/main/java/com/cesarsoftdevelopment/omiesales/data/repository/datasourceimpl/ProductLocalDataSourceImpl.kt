@@ -35,9 +35,9 @@ class ProductLocalDataSourceImpl(
         }
     }
 
-    override suspend fun updateProductQuantity(productId: Int, newQuantity: Int) {
+    override suspend fun updateProduct(productEntity: ProductEntity) {
         withContext(ioDispatcher) {
-            productDao.updateProductQuantity(productId, newQuantity)
+            productDao.updateProduct(productEntity)
         }
     }
 }

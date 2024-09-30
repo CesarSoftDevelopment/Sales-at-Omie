@@ -1,13 +1,12 @@
 package com.cesarsoftdevelopment.omiesales.di.modules
 
-import android.app.Application
 import com.cesarsoftdevelopment.omiesales.domain.usecase.DeleteAllProductsUseCase
 import com.cesarsoftdevelopment.omiesales.domain.usecase.DeleteProductUseCase
 import com.cesarsoftdevelopment.omiesales.domain.usecase.GetProductsUseCase
 import com.cesarsoftdevelopment.omiesales.domain.usecase.GetSalesUseCase
 import com.cesarsoftdevelopment.omiesales.domain.usecase.SaveProductUseCase
 import com.cesarsoftdevelopment.omiesales.domain.usecase.SaveSaleUseCase
-import com.cesarsoftdevelopment.omiesales.domain.usecase.UpdateProductQuantityUseCase
+import com.cesarsoftdevelopment.omiesales.domain.usecase.UpdateProductUseCase
 import com.cesarsoftdevelopment.omiesales.ui.main.makesale.MakeSaleViewModelFactory
 import com.cesarsoftdevelopment.omiesales.ui.main.saleshistory.SalesHistoryViewModelFactory
 import dagger.Module
@@ -25,7 +24,7 @@ class FactoryModule {
     fun provideMakeSaleViewModelFactory(
         saveProductUseCase : SaveProductUseCase,
         getProductsUseCase : GetProductsUseCase,
-        updateProductQuantityUseCase : UpdateProductQuantityUseCase,
+        updateProductUseCase : UpdateProductUseCase,
         deleteProductUseCase : DeleteProductUseCase,
         deleteAllProductsUseCase: DeleteAllProductsUseCase,
         saveSaleUseCase: SaveSaleUseCase
@@ -34,7 +33,7 @@ class FactoryModule {
         return MakeSaleViewModelFactory(
             saveProductUseCase,
             getProductsUseCase,
-            updateProductQuantityUseCase,
+            updateProductUseCase,
             deleteProductUseCase,
             deleteAllProductsUseCase,
             saveSaleUseCase

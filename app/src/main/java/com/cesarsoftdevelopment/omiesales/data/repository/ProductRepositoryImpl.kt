@@ -24,11 +24,8 @@ class ProductRepositoryImpl(
         }
     }
 
-    override suspend fun updateProductQuantity(productId: Int, newQuantity: Int) {
-        productLocalDataSource.updateProductQuantity(
-            productId,
-            newQuantity
-        )
+    override suspend fun updateProduct(product: Product) {
+        productLocalDataSource.updateProduct(product.asLocalProduct())
     }
 
     override suspend fun deleteProductById(productId: Int) {

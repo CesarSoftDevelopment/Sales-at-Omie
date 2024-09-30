@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import com.cesarsoftdevelopment.omiesales.data.model.ProductEntity
 import com.cesarsoftdevelopment.omiesales.data.model.Sale
 import com.cesarsoftdevelopment.omiesales.domain.model.Product
@@ -24,6 +25,6 @@ interface ProductDao {
     @Query("DELETE FROM product")
     suspend fun deleteAllProducts()
 
-    @Query("UPDATE product SET quantity = :newQuantity WHERE id = :productId")
-    suspend fun updateProductQuantity(productId: Int, newQuantity: Int)
+    @Update
+    suspend fun updateProduct(product: ProductEntity)
 }

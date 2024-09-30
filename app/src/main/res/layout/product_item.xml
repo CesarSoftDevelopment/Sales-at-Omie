@@ -62,7 +62,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:visibility="invisible"
+                android:visibility="visible"
                 />
 
             <TextView
@@ -88,7 +88,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:visibility="invisible"
+                android:visibility="visible"
                 />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

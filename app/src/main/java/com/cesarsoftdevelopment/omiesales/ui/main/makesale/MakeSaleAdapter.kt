@@ -45,9 +45,24 @@ class MakeSaleAdapter(
             binding.productUnitValue.text = "Valor unitário: ${FormatterUtil.formatToBrazilianCurrency(item.unitValue)}"
             binding.productTotalValue.text = "Valor total: ${FormatterUtil.formatToBrazilianCurrency(item.totalValue)}"
 
+            val product = Product(
+                item.id,
+                item.productName,
+                item.quantity,
+                item.unitValue,
+                item.totalValue
+            )
 
             binding.ibTrash.setOnClickListener {
                 makeSaleViewModel.deleteProduct(item.id)
+            }
+
+            binding.ibPlus.setOnClickListener {
+                makeSaleViewModel.updateProduct(product, true)
+            }
+
+            binding.ibMinus.setOnClickListener {
+                makeSaleViewModel.updateProduct(product, false)
             }
 
         }

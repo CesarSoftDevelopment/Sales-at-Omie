@@ -8,7 +8,7 @@ import com.cesarsoftdevelopment.omiesales.domain.usecase.GetProductsUseCase
 import com.cesarsoftdevelopment.omiesales.domain.usecase.GetSalesUseCase
 import com.cesarsoftdevelopment.omiesales.domain.usecase.SaveProductUseCase
 import com.cesarsoftdevelopment.omiesales.domain.usecase.SaveSaleUseCase
-import com.cesarsoftdevelopment.omiesales.domain.usecase.UpdateProductQuantityUseCase
+import com.cesarsoftdevelopment.omiesales.domain.usecase.UpdateProductUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -39,8 +39,8 @@ class UseCaseModule {
     }
 
     @Provides
-    fun provideUpdateProductQuantityUseCase(productRepository: ProductRepository): UpdateProductQuantityUseCase {
-        return UpdateProductQuantityUseCase(productRepository)
+    fun provideUpdateProductUseCase(productRepository: ProductRepository): UpdateProductUseCase {
+        return UpdateProductUseCase(productRepository)
     }
 
     @Provides
