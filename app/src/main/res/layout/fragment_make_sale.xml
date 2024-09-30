@@ -127,6 +127,30 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout5"
+            style="@style/CustomTextInputLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:boxBackgroundColor="@color/white"
+            app:boxBackgroundMode="outline"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_insert">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/discount_product_value"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/open_sans_medium"
+                android:hint="@string/discount_value"
+                android:inputType="number"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
         <TextView
             android:id="@+id/item_value"
             android:layout_width="wrap_content"
@@ -145,15 +169,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/open_sans_bold"
-            android:text="@string/insert"
-            android:textAllCaps="false"
             android:paddingStart="32dp"
             android:paddingEnd="32dp"
-            android:layout_marginTop="25dp"
+            android:text="@string/insert"
+            android:textAllCaps="false"
             app:cornerRadius="12dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/item_value" />
+            app:layout_constraintTop_toBottomOf="@+id/item_value"
+            android:layout_marginTop="12dp"
+            />
 
 
         <androidx.recyclerview.widget.RecyclerView
@@ -162,13 +187,14 @@
             android:layout_height="wrap_content"
             android:layout_margin="12dp"
             android:visibility="visible"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toTopOf="@+id/product_quantity_sale"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_insert"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout5"
             tools:itemCount="1"
             tools:listitem="@layout/product_item"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:layout_marginTop="12dp"
 
             />
 
@@ -207,6 +233,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/total_sale"
             android:layout_marginTop="32dp" />
+
+
 
         <Button
             android:id="@+id/btn_save_sale"

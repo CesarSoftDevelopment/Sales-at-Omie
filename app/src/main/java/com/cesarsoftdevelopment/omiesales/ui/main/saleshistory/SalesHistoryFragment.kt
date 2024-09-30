@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.viewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -17,14 +19,21 @@ import com.cesarsoftdevelopment.omiesales.utils.FormatterUtil
 import com.cesarsoftdevelopment.omiesales.utils.SaleCalculator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class SalesHistoryFragment : Fragment() {
 
-    private lateinit var salesHistoryViewModel : SalesHistoryViewModel
     private var _binding: FragmentSalesHistoryBinding? = null
     private val binding get() = _binding!!
     private lateinit var salesHistoryAdapter : SalesHistoryAdapter
+
+    @Inject
+    lateinit var salesHistoryViewModelFactory : SalesHistoryViewModelFactory
+
+    private val salesHistoryViewModel: SalesHistoryViewModel by viewModels {
+        salesHistoryViewModelFactory
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,7 +49,6 @@ class SalesHistoryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setViewModel()
         setAdapter()
         observeItemsList()
     }
@@ -76,9 +84,6 @@ class SalesHistoryFragment : Fragment() {
         )
     }
 
-    private fun setViewModel() {
-        salesHistoryViewModel = (activity as MainActivity).salesHistoryViewModel
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()

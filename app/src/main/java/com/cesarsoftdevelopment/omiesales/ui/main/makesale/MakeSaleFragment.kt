@@ -5,14 +5,17 @@ import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -25,20 +28,31 @@ import com.cesarsoftdevelopment.omiesales.ui.main.MainActivity
 import com.cesarsoftdevelopment.omiesales.utils.FormatterUtil
 import com.cesarsoftdevelopment.omiesales.utils.SaleCalculator
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MakeSaleFragment : Fragment() {
-    private lateinit var makeSaleViewModel : MakeSaleViewModel
     private lateinit var makeSaleAdapter: MakeSaleAdapter
     private var _binding: FragmentMakeSaleBinding? = null
     private val binding get() = _binding!!
     private var unitValueFormatted = ""
+    private var discountValueFormatted = ""
     private var itemUnitValue = 0.0
     private var itemQuantity = 0
     private var itemValue = 0.0
     private var listItemsQuantity = 0
     private var totalOrderValue = 0.0
+    private var discountValue = 0.0
     private var listItems = listOf<Product>()
+
+    @Inject
+    lateinit var makeSaleViewModelFactory : MakeSaleViewModelFactory
+
+    val makeSaleViewModel : MakeSaleViewModel by viewModels {
+        makeSaleViewModelFactory
+    }
 
 
     override fun onCreateView(
@@ -51,12 +65,13 @@ class MakeSaleFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setViewModel()
         setupTextWatchers()
         observeUnitValueFormatted()
         observeItemValueFormatted()
         observeItemQuantity()
         observeUnitValue()
+        observeDiscountValueFormatted()
+        observeDiscountValue()
         observeItemValue()
         saveProduct()
         observeErrorMessage()
@@ -65,10 +80,6 @@ class MakeSaleFragment : Fragment() {
         handleOnBackPressed()
         handleWhenCancelButtonIsClicked()
         saveSale()
-    }
-
-    private fun setViewModel() {
-        makeSaleViewModel = (activity as MainActivity).makeSaleViewModel
     }
 
     @SuppressLint("SetTextI18n")
@@ -105,6 +116,16 @@ class MakeSaleFragment : Fragment() {
         }
     }
 
+    private fun observeDiscountValueFormatted() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                makeSaleViewModel.discountValueFormatted.collect { formattedValue ->
+                    discountValueFormatted = formattedValue
+                }
+            }
+        }
+    }
+
     private fun observeItemQuantity() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -120,6 +141,16 @@ class MakeSaleFragment : Fragment() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 makeSaleViewModel.unitValue.collect { unitValue ->
                     itemUnitValue = unitValue
+                }
+            }
+        }
+    }
+
+    private fun observeDiscountValue() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                makeSaleViewModel.discountValue.collect { discount ->
+                    discountValue = discount
                 }
             }
         }
@@ -143,6 +174,11 @@ class MakeSaleFragment : Fragment() {
                     listItemsQuantity = items.size
                     listItems = items
                     totalOrderValue = SaleCalculator.calculateTotalProducts(items)
+                    totalOrderValue -= discountValue
+
+                    items.map { product ->
+                        makeSaleViewModel.updateDiscountProduct(product)
+                    }
 
                     binding.productQuantitySale.text = "Qt de itens: $listItemsQuantity"
                     binding.totalSale.text = "Valor total: ${FormatterUtil.formatToBrazilianCurrency(totalOrderValue)}"
@@ -190,6 +226,31 @@ class MakeSaleFragment : Fragment() {
 
             }
         })
+
+        binding.discountProductValue.addTextChangedListener(object : TextWatcher {
+
+            var currentValue = ""
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+
+                val textValue = s.toString()
+
+                if(textValue != currentValue) {
+                    binding.discountProductValue.removeTextChangedListener(this)
+                    makeSaleViewModel.processDiscountValue(textValue)
+                    currentValue = discountValueFormatted
+
+                    binding.discountProductValue.setText(discountValueFormatted)
+                    binding.discountProductValue.setSelection(discountValueFormatted.length)
+                    binding.discountProductValue.addTextChangedListener(this)
+                }
+            }
+        })
+
     }
 
     private fun saveProduct() {

@@ -13,6 +13,7 @@
     <string name="product_name">Nome do Produto</string>
     <string name="product_quantity">Quantidade</string>
     <string name="unit_value">Valor unitário</string>
+    <string name="discount_value">Desconto do pedido</string>
     <string name="insert">Inserir</string>
     <string name="items_list">Lista de items</string>
     <string name="cancel">Cancelar</string>

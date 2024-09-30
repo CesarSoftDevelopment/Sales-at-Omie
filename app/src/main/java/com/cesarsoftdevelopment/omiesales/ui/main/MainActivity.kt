@@ -8,32 +8,12 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.cesarsoftdevelopment.omiesales.R
 import com.cesarsoftdevelopment.omiesales.databinding.ActivityMainBinding
-import com.cesarsoftdevelopment.omiesales.ui.main.makesale.MakeSaleViewModel
-import com.cesarsoftdevelopment.omiesales.ui.main.makesale.MakeSaleViewModelFactory
-import com.cesarsoftdevelopment.omiesales.ui.main.saleshistory.SalesHistoryViewModel
-import com.cesarsoftdevelopment.omiesales.ui.main.saleshistory.SalesHistoryViewModelFactory
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-
-    @Inject
-    lateinit var makeSaleViewModelFactory : MakeSaleViewModelFactory
-
-    val makeSaleViewModel : MakeSaleViewModel by viewModels {
-        makeSaleViewModelFactory
-    }
-
-    @Inject
-    lateinit var salesHistoryViewModelFactory : SalesHistoryViewModelFactory
-
-    val salesHistoryViewModel: SalesHistoryViewModel by viewModels {
-        salesHistoryViewModelFactory
-    }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

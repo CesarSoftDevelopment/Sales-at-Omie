@@ -107,7 +107,7 @@ class MakeSaleViewModelTest {
 
         coEvery { updateProductUseCase.invoke(product) } returns Unit
 
-        viewModel.updateProduct(product)
+        viewModel.updateProduct(product, false)
 
         coVerify {
             updateProductUseCase.invoke(product)

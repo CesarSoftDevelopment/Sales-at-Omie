@@ -34,8 +34,14 @@ class MakeSaleViewModel(
     private val _unitValue  = MutableStateFlow(0.0)
     val unitValue : StateFlow<Double> = _unitValue
 
+    private val _discountValue  = MutableStateFlow(0.0)
+    val discountValue : StateFlow<Double> = _discountValue
+
     private val _unitValueFormatted = MutableStateFlow("R$ 0,00")
     val unitValueFormatted: StateFlow<String> = _unitValueFormatted
+
+    private val _discountValueFormatted = MutableStateFlow("R$ 0,00")
+    val discountValueFormatted: StateFlow<String> = _discountValueFormatted
 
     private val _itemValue = MutableStateFlow(0.0)
     val itemValue : StateFlow<Double> = _itemValue
@@ -59,6 +65,21 @@ class MakeSaleViewModel(
         val formatted = FormatterUtil.formatToBrazilianCurrency(parsed)
 
         _unitValueFormatted.value = formatted
+    }
+
+    fun processDiscountValue(textValue: String) {
+
+        val cleanString = textValue.replace("[^\\d]".toRegex(), "")
+
+        val parsed = cleanString.toDoubleOrNull() ?: 0.0
+
+        _discountValue.value = parsed
+
+        calculateTotal()
+
+        val formatted = FormatterUtil.formatToBrazilianCurrency(parsed)
+
+        _discountValueFormatted.value = formatted
     }
 
 
@@ -140,7 +161,7 @@ class MakeSaleViewModel(
         }
 
 
-        val totalValue = (product.unitValue * quantity)
+        val totalValue = product.unitValue * quantity
 
         val item = Product(
             product.id,
@@ -152,6 +173,23 @@ class MakeSaleViewModel(
 
         updateProductUseCase.invoke(item)
     }
+
+    fun updateDiscountProduct(product: Product) = viewModelScope.launch {
+
+        val totalValue = product.unitValue * product.quantity - _discountValue.value
+
+        val item = Product(
+            product.id,
+            product.productName,
+            product.quantity,
+            product.unitValue,
+            totalValue
+        )
+
+        updateProductUseCase.invoke(item)
+    }
+
+
 
     fun deleteProduct(productId : Int) = viewModelScope.launch {
         deleteProductUseCase.invoke(productId)
