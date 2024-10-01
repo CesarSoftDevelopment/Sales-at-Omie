@@ -1,18 +1,16 @@
 package com.cesarsoftdevelopment.omiesales.ui.main.makesale
 
-import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
@@ -28,6 +26,7 @@ import com.cesarsoftdevelopment.omiesales.ui.main.MainActivity
 import com.cesarsoftdevelopment.omiesales.utils.FormatterUtil
 import com.cesarsoftdevelopment.omiesales.utils.SaleCalculator
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputEditText
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -48,9 +47,9 @@ class MakeSaleFragment : Fragment() {
     private var listItems = listOf<Product>()
 
     @Inject
-    lateinit var makeSaleViewModelFactory : MakeSaleViewModelFactory
+    lateinit var makeSaleViewModelFactory: MakeSaleViewModelFactory
 
-    val makeSaleViewModel : MakeSaleViewModel by viewModels {
+    val makeSaleViewModel: MakeSaleViewModel by viewModels {
         makeSaleViewModelFactory
     }
 
@@ -66,126 +65,60 @@ class MakeSaleFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupTextWatchers()
-        observeUnitValueFormatted()
-        observeItemValueFormatted()
-        observeItemQuantity()
-        observeUnitValue()
-        observeDiscountValueFormatted()
-        observeDiscountValue()
-        observeItemValue()
-        saveProduct()
-        observeErrorMessage()
+        getUiState()
         setAdapter()
-        observeItemsList()
-        handleOnBackPressed()
         handleWhenCancelButtonIsClicked()
+        handleOnBackPressed()
+        saveProduct()
         saveSale()
     }
 
-    @SuppressLint("SetTextI18n")
-    private fun observeItemValueFormatted() {
-        lifecycleScope.launch  {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                makeSaleViewModel.itemValueFormatted.collect { formattedItemValue ->
-                    binding.itemValue.text = "Valor total do item: $formattedItemValue"
-                }
-            }
-        }
-    }
 
-    private fun observeErrorMessage() {
-        lifecycleScope.launch  {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                makeSaleViewModel.errorMessage.collect { message ->
-                    if (message.isNotBlank()) {
-                        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
-                        makeSaleViewModel.clearErrorMessage()
-                    }
-                }
-            }
-        }
-    }
-
-    private fun observeUnitValueFormatted() {
+    private fun getUiState() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                makeSaleViewModel.unitValueFormatted.collect { formattedValue ->
-                    unitValueFormatted = formattedValue
+                makeSaleViewModel.salesState.collect { uiState ->
+                    itemUnitValue = uiState.unitValue
+                    unitValueFormatted = uiState.unitValueFormatted
+                    discountValue = uiState.discountValue
+                    discountValueFormatted = uiState.discountValueFormatted
+                    itemQuantity = uiState.quantity
+                    itemValue = uiState.itemValue
+
+                    setTextWithProductTotalValueFormatted(uiState.itemValueFormatted)
+                    setErrorMessage(uiState.errorMessage)
+                    getProductsList(uiState.items)
+                    showTotalSaleAndItemsQtd(uiState.items)
                 }
             }
         }
     }
 
-    private fun observeDiscountValueFormatted() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                makeSaleViewModel.discountValueFormatted.collect { formattedValue ->
-                    discountValueFormatted = formattedValue
-                }
-            }
-        }
+
+    private fun setTextWithProductTotalValueFormatted(formattedValue: String) {
+        binding.itemValue.text = "Valor total do item: $formattedValue"
     }
 
-    private fun observeItemQuantity() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                makeSaleViewModel.quantity.collect { quantity ->
-                    itemQuantity = quantity
-                }
-            }
+    private fun setErrorMessage(errorMessage: String) {
+        if(errorMessage.isNotBlank()) {
+            Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_LONG).show()
+            makeSaleViewModel.clearErrorMessage()
         }
+
     }
 
-    private fun observeUnitValue() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                makeSaleViewModel.unitValue.collect { unitValue ->
-                    itemUnitValue = unitValue
-                }
-            }
-        }
+    private fun getProductsList(items: List<Product>) {
+        listItemsQuantity = items.size
+        listItems = items
     }
 
-    private fun observeDiscountValue() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                makeSaleViewModel.discountValue.collect { discount ->
-                    discountValue = discount
-                }
-            }
-        }
-    }
+    private fun showTotalSaleAndItemsQtd(items: List<Product>) {
+        totalOrderValue = SaleCalculator.calculateTotalProducts(items)
+        totalOrderValue -= discountValue
 
-    private fun observeItemValue() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                makeSaleViewModel.itemValue.collect { value ->
-                    itemValue = value
-                }
-            }
-        }
-    }
-
-    @SuppressLint("SetTextI18n")
-    private fun observeItemsList() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                makeSaleViewModel.items.collect { items ->
-                    listItemsQuantity = items.size
-                    listItems = items
-                    totalOrderValue = SaleCalculator.calculateTotalProducts(items)
-                    totalOrderValue -= discountValue
-
-                    items.map { product ->
-                        makeSaleViewModel.updateDiscountProduct(product)
-                    }
-
-                    binding.productQuantitySale.text = "Qt de itens: $listItemsQuantity"
-                    binding.totalSale.text = "Valor total: ${FormatterUtil.formatToBrazilianCurrency(totalOrderValue)}"
-                    makeSaleAdapter.submitList(items)
-                }
-            }
-        }
+        binding.productQuantitySale.text = "Qt de itens: $listItemsQuantity"
+        binding.totalSale.text = "Valor total: ${FormatterUtil.formatToBrazilianCurrency(totalOrderValue)}"
+        makeSaleAdapter.submitList(items)
     }
 
     private fun setupTextWatchers() {
@@ -193,7 +126,6 @@ class MakeSaleFragment : Fragment() {
         binding.productQuantity.addTextChangedListener(object : TextWatcher {
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(s: Editable?) {
@@ -207,7 +139,6 @@ class MakeSaleFragment : Fragment() {
             var currentValue = ""
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(s: Editable?) {
@@ -232,7 +163,6 @@ class MakeSaleFragment : Fragment() {
             var currentValue = ""
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
             override fun afterTextChanged(s: Editable?) {
@@ -253,10 +183,10 @@ class MakeSaleFragment : Fragment() {
 
     }
 
-    private fun saveProduct() {
 
+
+    private fun saveProduct() {
         binding.btnInsert.setOnClickListener {
-            val id = 0
             val clientName = binding.clientName.text.toString()
             val productName = binding.productName.text.toString()
             val productQuantity = itemQuantity
@@ -264,7 +194,7 @@ class MakeSaleFragment : Fragment() {
             val productTotalValue = itemValue
 
             val product = Product(
-                id,
+                0,
                 productName,
                 productQuantity,
                 productUnitValue,
@@ -285,7 +215,7 @@ class MakeSaleFragment : Fragment() {
             val clientName = binding.clientName.text.toString()
             val listSize = listItemsQuantity
 
-            if(makeSaleViewModel.validateFieldsToMakeSale(clientName, listSize)) {
+            if (makeSaleViewModel.validateFieldsToMakeSale(clientName, listSize)) {
                 val sale = Sale(
                     0,
                     clientName,
@@ -346,25 +276,27 @@ class MakeSaleFragment : Fragment() {
     }
 
     private fun handleWhenCancelButtonIsClicked() {
-       binding.btnCancel.setOnClickListener {
-           if(listItemsQuantity > 0) {
-               createAlertDialog()
-           }else {
-               navigateToHomeFragment()
-           }
-       }
+        binding.btnCancel.setOnClickListener {
+            if (listItemsQuantity > 0) {
+                createAlertDialog()
+            } else {
+                navigateToHomeFragment()
+            }
+        }
     }
 
     private fun handleOnBackPressed() {
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                if(listItemsQuantity > 0) {
-                    createAlertDialog()
-                }else {
-                    navigateToHomeFragment()
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (listItemsQuantity > 0) {
+                        createAlertDialog()
+                    } else {
+                        navigateToHomeFragment()
+                    }
                 }
-            }
-        })
+            })
     }
 
     private fun navigateToHomeFragment() {

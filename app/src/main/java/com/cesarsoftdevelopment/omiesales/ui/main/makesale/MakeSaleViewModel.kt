@@ -14,6 +14,7 @@ import com.cesarsoftdevelopment.omiesales.utils.FormatterUtil
 import com.cesarsoftdevelopment.omiesales.utils.TextProvider
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class MakeSaleViewModel(
@@ -25,73 +26,51 @@ class MakeSaleViewModel(
     private val saveSaleUseCase: SaveSaleUseCase
 ) : ViewModel() {
 
-    private val _items  = MutableStateFlow<List<Product>>(emptyList())
-    val items : StateFlow<List<Product>> = _items
-
-    private val _quantity  = MutableStateFlow(0)
-    val quantity : StateFlow<Int> = _quantity
-
-    private val _unitValue  = MutableStateFlow(0.0)
-    val unitValue : StateFlow<Double> = _unitValue
-
-    private val _discountValue  = MutableStateFlow(0.0)
-    val discountValue : StateFlow<Double> = _discountValue
-
-    private val _unitValueFormatted = MutableStateFlow("R$ 0,00")
-    val unitValueFormatted: StateFlow<String> = _unitValueFormatted
-
-    private val _discountValueFormatted = MutableStateFlow("R$ 0,00")
-    val discountValueFormatted: StateFlow<String> = _discountValueFormatted
-
-    private val _itemValue = MutableStateFlow(0.0)
-    val itemValue : StateFlow<Double> = _itemValue
-
-    private val _itemValueFormatted = MutableStateFlow("R$ 0,00")
-    val itemValueFormatted : StateFlow<String> = _itemValueFormatted
-
-    private val _errorMessage = MutableStateFlow("")
-    val errorMessage: StateFlow<String> = _errorMessage
+    private val _salesState = MutableStateFlow(SalesState())
+    val salesState: StateFlow<SalesState> = _salesState
 
     fun processUnitValue(textValue: String) {
-
         val cleanString = textValue.replace("[^\\d]".toRegex(), "")
-
         val parsed = cleanString.toDoubleOrNull() ?: 0.0
-
-        _unitValue.value = parsed
-
-        calculateTotal()
-
         val formatted = FormatterUtil.formatToBrazilianCurrency(parsed)
 
-        _unitValueFormatted.value = formatted
+        _salesState.update { currentState ->
+            currentState.copy(unitValue = parsed, unitValueFormatted = formatted)
+        }
+
+       calculateItemTotal()
     }
 
     fun processDiscountValue(textValue: String) {
-
         val cleanString = textValue.replace("[^\\d]".toRegex(), "")
-
         val parsed = cleanString.toDoubleOrNull() ?: 0.0
-
-        _discountValue.value = parsed
-
-        calculateTotal()
-
         val formatted = FormatterUtil.formatToBrazilianCurrency(parsed)
 
-        _discountValueFormatted.value = formatted
+        _salesState.update { currentState ->
+            currentState.copy(discountValue = parsed, discountValueFormatted = formatted)
+        }
+
+        calculateItemTotal()
     }
 
 
     fun setQuantity(quantity: Int) {
-        _quantity.value = quantity
-        calculateTotal()
+        _salesState.update { currentState ->
+            currentState.copy(quantity = quantity)
+        }
+
+        calculateItemTotal()
     }
 
-    private fun calculateTotal() {
-        val total = _quantity.value * _unitValue.value
-        _itemValueFormatted.value = FormatterUtil.formatToBrazilianCurrency(total)
-        _itemValue.value = total
+    private fun calculateItemTotal() {
+        val total = _salesState.value.quantity * _salesState.value.unitValue
+
+        _salesState.update { currentState ->
+            currentState.copy(
+                itemValueFormatted = FormatterUtil.formatToBrazilianCurrency(total),
+                itemValue = total
+            )
+        }
     }
 
 
@@ -107,10 +86,14 @@ class MakeSaleViewModel(
         }
 
         return if (error != null) {
-            _errorMessage.value = error
+            _salesState.update { currentState ->
+                currentState.copy(errorMessage = error)
+            }
             false
         } else {
-            _errorMessage.value = ""
+            _salesState.update { currentState ->
+                currentState.copy(errorMessage = "")
+            }
             true
         }
 
@@ -119,21 +102,26 @@ class MakeSaleViewModel(
     fun validateFieldsToMakeSale(clientName : String, listSize : Int) : Boolean {
 
         if(clientName.isBlank()) {
-            _errorMessage.value = "Preencha o nome do cliente"
+            _salesState.update { currentState ->
+                currentState.copy(errorMessage = TextProvider.CLIENT_NAME_EMPTY)
+            }
             return false
         }
 
         if(listSize <= 0) {
-            _errorMessage.value = "Adicione um produto na lista"
+            _salesState.update { currentState ->
+                currentState.copy(errorMessage = TextProvider.LIST_EMPTY)
+            }
             return false
         }
-
         return true
     }
 
 
     fun clearErrorMessage() {
-        _errorMessage.value = ""
+        _salesState.update { currentState ->
+            currentState.copy(errorMessage = "")
+        }
     }
 
     fun saveProduct(product: Product) = viewModelScope.launch {
@@ -143,13 +131,16 @@ class MakeSaleViewModel(
     fun getProducts() {
         viewModelScope.launch {
             getProductsUseCase.invoke().collect { itemsList ->
-                _items.value = itemsList
+                _salesState.update { currentState ->
+                    currentState.copy(
+                        items = itemsList
+                    )
+                }
             }
         }
     }
 
     fun updateProduct(product: Product, isSum : Boolean) = viewModelScope.launch {
-
         var quantity = product.quantity
 
         if(isSum) {
@@ -162,7 +153,6 @@ class MakeSaleViewModel(
 
 
         val totalValue = product.unitValue * quantity
-
         val item = Product(
             product.id,
             product.productName,
@@ -176,7 +166,8 @@ class MakeSaleViewModel(
 
     fun updateDiscountProduct(product: Product) = viewModelScope.launch {
 
-        val totalValue = product.unitValue * product.quantity - _discountValue.value
+        //val totalValue = product.unitValue * product.quantity - _discountValue.value
+        val totalValue = 0.0
 
         val item = Product(
             product.id,
@@ -185,10 +176,8 @@ class MakeSaleViewModel(
             product.unitValue,
             totalValue
         )
-
         updateProductUseCase.invoke(item)
     }
-
 
 
     fun deleteProduct(productId : Int) = viewModelScope.launch {
@@ -198,7 +187,6 @@ class MakeSaleViewModel(
     fun deleteAllProducts() = viewModelScope.launch {
         deleteAllProductsUseCase.invoke()
     }
-
 
     fun saveSale(sale: Sale) = viewModelScope.launch {
         saveSaleUseCase.invoke(sale)
