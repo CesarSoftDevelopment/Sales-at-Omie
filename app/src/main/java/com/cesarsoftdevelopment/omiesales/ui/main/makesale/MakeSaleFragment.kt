@@ -36,8 +36,8 @@ class MakeSaleFragment : Fragment() {
     private lateinit var makeSaleAdapter: MakeSaleAdapter
     private var _binding: FragmentMakeSaleBinding? = null
     private val binding get() = _binding!!
-    private var unitValueFormatted = ""
-    private var discountValueFormatted = ""
+    private lateinit var unitValueFormatted : String
+    private lateinit var discountValueFormatted : String
     private var itemUnitValue = 0.0
     private var itemQuantity = 0
     private var itemValue = 0.0
@@ -96,7 +96,7 @@ class MakeSaleFragment : Fragment() {
 
 
     private fun setTextWithProductTotalValueFormatted(formattedValue: String) {
-        binding.itemValue.text = "Valor total do item: $formattedValue"
+        binding.itemValue.text = resources.getString(R.string.total_item_value, formattedValue)
     }
 
     private fun setErrorMessage(errorMessage: String) {
@@ -109,69 +109,70 @@ class MakeSaleFragment : Fragment() {
 
     private fun getProductsList(items: List<Product>) {
         listItemsQuantity = items.size
-        listItems = items
+        listItems = addDiscountToProducts(items)
+        makeSaleAdapter.submitList(items)
+    }
+
+    private fun addDiscountToProducts(items: List<Product>): List<Product> {
+        return makeSaleViewModel.addDiscountToProducts(items, discountValue)
     }
 
     private fun showTotalSaleAndItemsQtd(items: List<Product>) {
         totalOrderValue = SaleCalculator.calculateTotalProducts(items)
         totalOrderValue -= discountValue
 
-        binding.productQuantitySale.text = "Qt de itens: $listItemsQuantity"
-        binding.totalSale.text = "Valor total: ${FormatterUtil.formatToBrazilianCurrency(totalOrderValue)}"
-        makeSaleAdapter.submitList(items)
+        binding.productQuantitySale.text = resources.getString(R.string.items_qtd, listItemsQuantity)
+        binding.totalSale.text = resources.getString(
+            R.string.total_value_sale,
+            FormatterUtil.formatToBrazilianCurrency(totalOrderValue)
+        )
     }
 
     private fun setupTextWatchers() {
-
         binding.productQuantity.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(char: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(char: CharSequence?, start: Int, before: Int, count: Int) {}
 
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-
-            override fun afterTextChanged(s: Editable?) {
-                val quantity = s.toString().toIntOrNull() ?: 0
+            override fun afterTextChanged(editable: Editable?) {
+                val quantity = editable.toString().toIntOrNull() ?: 0
                 makeSaleViewModel.setQuantity(quantity)
             }
         })
 
         binding.unitProductValue.addTextChangedListener(object : TextWatcher {
-
             var currentValue = ""
 
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun beforeTextChanged(char: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(char: CharSequence?, start: Int, before: Int, count: Int) {}
 
-            override fun afterTextChanged(s: Editable?) {
-
-                val textValue = s.toString()
+            override fun afterTextChanged(editable: Editable?) {
+                val textValue = editable.toString()
 
                 if(textValue != currentValue) {
                     binding.unitProductValue.removeTextChangedListener(this)
                     makeSaleViewModel.processUnitValue(textValue)
-                    currentValue = unitValueFormatted
 
+                    currentValue = unitValueFormatted
                     binding.unitProductValue.setText(unitValueFormatted)
                     binding.unitProductValue.setSelection(unitValueFormatted.length)
                     binding.unitProductValue.addTextChangedListener(this)
                 }
-
             }
         })
 
         binding.discountProductValue.addTextChangedListener(object : TextWatcher {
-
             var currentValue = ""
 
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun beforeTextChanged(char: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(char: CharSequence?, start: Int, before: Int, count: Int) {}
 
-            override fun afterTextChanged(s: Editable?) {
-
-                val textValue = s.toString()
+            override fun afterTextChanged(editable: Editable?) {
+                val textValue = editable.toString()
 
                 if(textValue != currentValue) {
                     binding.discountProductValue.removeTextChangedListener(this)
                     makeSaleViewModel.processDiscountValue(textValue)
+                    getProductsList(listItems)
                     currentValue = discountValueFormatted
 
                     binding.discountProductValue.setText(discountValueFormatted)
@@ -193,13 +194,7 @@ class MakeSaleFragment : Fragment() {
             val productUnitValue = itemUnitValue
             val productTotalValue = itemValue
 
-            val product = Product(
-                0,
-                productName,
-                productQuantity,
-                productUnitValue,
-                productTotalValue
-            )
+            val product = Product(0, productName, productQuantity, productUnitValue, productTotalValue)
 
             if (makeSaleViewModel.isValidField(clientName, product)) {
                 makeSaleViewModel.saveProduct(product)
@@ -216,12 +211,7 @@ class MakeSaleFragment : Fragment() {
             val listSize = listItemsQuantity
 
             if (makeSaleViewModel.validateFieldsToMakeSale(clientName, listSize)) {
-                val sale = Sale(
-                    0,
-                    clientName,
-                    totalOrderValue,
-                    listItems,
-                )
+                val sale = Sale(0, clientName, totalOrderValue, listItems)
                 makeSaleViewModel.saveSale(sale)
                 makeSaleViewModel.deleteAllProducts()
                 binding.clientName.text?.clear()
@@ -233,9 +223,7 @@ class MakeSaleFragment : Fragment() {
 
     private fun setAdapter() {
         makeSaleAdapter = MakeSaleAdapter(makeSaleViewModel)
-        binding.recyclerItems.apply {
-            adapter = makeSaleAdapter
-        }
+        binding.recyclerItems.apply { adapter = makeSaleAdapter }
     }
 
     private fun clearFields() {

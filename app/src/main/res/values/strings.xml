@@ -27,4 +27,7 @@
     <string name="empty_sale">Nenhuma venda</string>
     <string name="order_items">Itens do pedido</string>
     <string name="total_order">Total do pedido :</string>
+    <string name="total_item_value">Valor total do item: %s</string>
+    <string name="items_qtd">Qt de itens: %d</string>
+    <string name="total_value_sale">Valor total: %s</string>
 </resources>

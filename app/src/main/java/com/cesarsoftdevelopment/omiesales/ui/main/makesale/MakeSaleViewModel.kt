@@ -49,8 +49,20 @@ class MakeSaleViewModel(
         _salesState.update { currentState ->
             currentState.copy(discountValue = parsed, discountValueFormatted = formatted)
         }
+    }
 
-        calculateItemTotal()
+    fun addDiscountToProducts(items: List<Product>, discountValue : Double): List<Product> {
+
+        val totalValue = items.sumOf {
+            it.totalValue
+        }
+
+        return items.map { product ->
+            val proportionalDiscount = (product.totalValue / totalValue) * discountValue
+            product.copy(
+                totalValue = product.totalValue - proportionalDiscount
+            )
+        }
     }
 
 
@@ -63,7 +75,10 @@ class MakeSaleViewModel(
     }
 
     private fun calculateItemTotal() {
-        val total = _salesState.value.quantity * _salesState.value.unitValue
+        val productQuantity = _salesState.value.quantity
+        val productUnitValue = _salesState.value.unitValue
+
+        val total = productQuantity * productUnitValue
 
         _salesState.update { currentState ->
             currentState.copy(
@@ -164,9 +179,8 @@ class MakeSaleViewModel(
         updateProductUseCase.invoke(item)
     }
 
-    fun updateDiscountProduct(product: Product) = viewModelScope.launch {
+    fun updateProductAddDiscount(product: Product) = viewModelScope.launch {
 
-        //val totalValue = product.unitValue * product.quantity - _discountValue.value
         val totalValue = 0.0
 
         val item = Product(
