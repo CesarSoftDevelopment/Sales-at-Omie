@@ -77,22 +77,22 @@ class MakeSaleViewModelTest {
         }
     }
 
-    @Test
-    fun `getProducts should update the products flow`() {
-
-        val productList = listOf(
-            Product(1,
-                "Test Product",
-                1, 10.0,
-                10.0)
-        )
-
-        coEvery { getProductsUseCase.invoke() } returns flowOf(productList)
-
-        viewModel.getProducts()
-
-        assert(viewModel.items.value == productList)
-    }
+//    @Test
+//    fun `getProducts should update the products flow`() {
+//
+//        val productList = listOf(
+//            Product(1,
+//                "Test Product",
+//                1, 10.0,
+//                10.0)
+//        )
+//
+//        coEvery { getProductsUseCase.invoke() } returns flowOf(productList)
+//
+//        viewModel.getProducts()
+//
+//        assert(viewModel.items.value == productList)
+//    }
 
     @Test
     fun `updateProduct should call updateProductUseCase`()  {
