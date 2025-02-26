@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.cesarsoftdevelopment.feature"
+    namespace = "com.cesarsoftdevelopment.home"
     compileSdk = 34
 
     defaultConfig {

@@ -21,6 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Omie Sales"
 include(":app")
-include(":data")
-include(":core")
-include(":feature")
+include(":feature:home")

@@ -1,4 +1,4 @@
-package com.cesarsoftdevelopment.core
+package com.cesarsoftdevelopment.home
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.cesarsoftdevelopment.core.test", appContext.packageName)
+        assertEquals("com.cesarsoftdevelopment.home.test", appContext.packageName)
     }
 }

@@ -1,4 +1,4 @@
-package com.cesarsoftdevelopment.core
+package com.cesarsoftdevelopment.home
 
 import org.junit.Test
 
