@@ -23,3 +23,6 @@ rootProject.name = "Omie Sales"
 include(":app")
 include(":feature:home")
 include(":feature:makesale")
+include(":domain:products")
+include(":core:database")
+include(":data:products")
