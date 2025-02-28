@@ -69,20 +69,20 @@ class SalesHistoryFragment : Fragment() {
     private fun setAdapter() {
 
         salesHistoryAdapter = SalesHistoryAdapter(SalesHistoryAdapter.OnClickListener { products ->
-            navigateToSalesProducts(products)
+         //   navigateToSalesProducts(products)
         })
 
         binding.recyclerSales.adapter = salesHistoryAdapter
 
     }
 
-    private fun navigateToSalesProducts(products : List<Product>) {
-        requireView().findNavController().navigate(
-            SalesHistoryFragmentDirections.actionNavigationSaleHistoryToSaleProductsFragment(
-                products.toTypedArray()
-            )
-        )
-    }
+//    private fun navigateToSalesProducts(products : List<Product>) {
+//        requireView().findNavController().navigate(
+//            SalesHistoryFragmentDirections.actionNavigationSaleHistoryToSaleProductsFragment(
+//                products.toTypedArray()
+//            )
+//        )
+//    }
 
 
     override fun onDestroyView() {

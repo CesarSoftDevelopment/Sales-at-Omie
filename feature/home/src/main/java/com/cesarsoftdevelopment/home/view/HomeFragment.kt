@@ -1,13 +1,12 @@
-package com.cesarsoftdevelopment.omiesales.ui.main.home
+package com.cesarsoftdevelopment.home.view
 
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
-import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
-import com.cesarsoftdevelopment.omiesales.databinding.FragmentHomeBinding
+import com.cesarsoftdevelopment.home.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
 
@@ -31,25 +30,25 @@ class HomeFragment : Fragment() {
     }
 
     private fun setUpNavigation() {
-        navigateToCreateSale()
-        navigateToSales()
+      //  navigateToCreateSale()
+        //navigateToSales()
     }
 
-    private fun navigateToCreateSale() {
-        binding.mcCreateSale.setOnClickListener {
-            it.findNavController().navigate(
-                HomeFragmentDirections.actionNavigationHomeToNavigationMakeSale()
-            )
-        }
-    }
+//    private fun navigateToCreateSale() {
+//        binding.mcCreateSale.setOnClickListener {
+//            it.findNavController().navigate(
+//                HomeFragmentDirections.actionNavigationHomeToNavigationMakeSale()
+//            )
+//        }
+//    }
 
-    private fun navigateToSales() {
-        binding.mcSales.setOnClickListener {
-            it.findNavController().navigate(
-                HomeFragmentDirections.actionNavigationHomeToNavigationSaleHistory()
-            )
-        }
-    }
+//    private fun navigateToSales() {
+//        binding.mcSales.setOnClickListener {
+//            it.findNavController().navigate(
+//                HomeFragmentDirections.actionNavigationHomeToNavigationSaleHistory()
+//            )
+//        }
+//    }
 
     private fun handleOnBackPressed() {
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {

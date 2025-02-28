@@ -27,6 +27,8 @@ roomTesting = "2.6.1"
 shimmer = "0.1.0"
 truth = "1.4.4"
 jetbrainsKotlinJvm = "2.0.10"
+navigationFragmentKtxVersion = "2.8.8"
+navigationUiKtxVersion = "2.8.8"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -60,6 +62,8 @@ mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 shimmer = { module = "com.facebook.shimmer:shimmer", version.ref = "shimmer" }
 truth = { module = "com.google.truth:truth", version.ref = "truth" }
+navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigationFragmentKtxVersion" }
+navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigationUiKtxVersion" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

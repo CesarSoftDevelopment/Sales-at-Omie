@@ -33,9 +33,9 @@ class SaleProductsFragment : Fragment() {
     }
 
     private fun getArgs() {
-        val args = SaleProductsFragmentArgs.fromBundle(requireArguments())
-        val productList = args.productList
-        salesProductAdapter.submitList(productList.toList())
+      //  val args = SaleProductsFragmentArgs.fromBundle(requireArguments())
+       // val productList = args.productList
+     //   salesProductAdapter.submitList(productList.toList())
 
     }
 
