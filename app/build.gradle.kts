@@ -45,6 +45,7 @@ android {
 dependencies {
 
     implementation(project(":feature:home"))
+    implementation(project(":feature:makesale"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
