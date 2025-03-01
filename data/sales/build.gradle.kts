@@ -1,10 +1,11 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id("com.google.devtools.ksp")
 }
 
 android {
-    namespace = "com.cesarsoftdevelopment.products"
+    namespace = "com.cesarsoftdevelopment.sales"
     compileSdk = 34
 
     compileOptions {
@@ -18,10 +19,17 @@ android {
 
 dependencies {
 
+    implementation(project(":core:database"))
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp (libs.androidx.room.compiler)
+
 }

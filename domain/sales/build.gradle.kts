@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.cesarsoftdevelopment.products"
+    namespace = "com.cesarsoftdevelopment.sales"
     compileSdk = 34
 
     compileOptions {
