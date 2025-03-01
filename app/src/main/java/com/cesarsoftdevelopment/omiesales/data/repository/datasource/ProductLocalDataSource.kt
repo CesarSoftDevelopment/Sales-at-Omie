@@ -9,5 +9,4 @@ interface ProductLocalDataSource {
     suspend fun deleteProductById(productId: Int)
     suspend fun deleteAllProducts()
     suspend fun updateProduct(productEntity: ProductEntity)
-
 }

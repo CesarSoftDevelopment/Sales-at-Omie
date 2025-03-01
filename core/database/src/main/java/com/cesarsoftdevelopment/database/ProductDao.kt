@@ -1,15 +1,16 @@
-package com.cesarsoftdevelopment.omiesales.data.database
+package com.cesarsoftdevelopment.database
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import com.cesarsoftdevelopment.omiesales.data.model.ProductEntity
+import com.cesarsoftdevelopment.products.model.ProductEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ProductDao {
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertProduct(productEntity: ProductEntity): Long
 
@@ -24,4 +25,5 @@ interface ProductDao {
 
     @Update
     suspend fun updateProduct(product: ProductEntity)
+
 }

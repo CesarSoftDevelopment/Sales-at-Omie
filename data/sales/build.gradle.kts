@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
     id("com.google.devtools.ksp")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -19,7 +20,9 @@ android {
 
 dependencies {
 
+    //IT'S NECESSARY TO PUT THE DEPENDENCY HERE, WITHOUT THIS HILT CANNOT FIND AND INJECT DEPENDENCY
     implementation(project(":core:database"))
+    implementation(project(":domain:sales"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
@@ -31,5 +34,8 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     ksp (libs.androidx.room.compiler)
+
+    implementation(libs.hilt.android)
+    ksp (libs.hilt.android.compiler)
 
 }

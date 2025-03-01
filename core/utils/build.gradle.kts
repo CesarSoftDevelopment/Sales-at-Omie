@@ -2,13 +2,11 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
     id("com.google.devtools.ksp")
-    id("com.google.dagger.hilt.android")
 }
 
 android {
-    namespace = "com.cesarsoftdevelopment.database"
+    namespace = "com.cesarsoftdevelopment.utils"
     compileSdk = 34
-
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -22,8 +20,7 @@ android {
 dependencies {
 
     implementation(project(":data:products"))
-    implementation(project(":data:sales"))
-    implementation(project(":core:utils"))
+    implementation(project(":domain:products"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
@@ -32,10 +29,10 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
+
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     ksp (libs.androidx.room.compiler)
 
-    implementation(libs.hilt.android)
-    ksp (libs.hilt.android.compiler)
+    implementation(libs.gson)
 }

@@ -8,6 +8,4 @@ class GetSalesUseCase (private val salesRepository: SalesRepository) {
     operator fun invoke(): Flow<List<Sale>> {
         return salesRepository.getSales()
     }
-
-
 }
