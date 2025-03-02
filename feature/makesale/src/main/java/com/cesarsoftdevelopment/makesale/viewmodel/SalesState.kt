@@ -1,9 +1,9 @@
 package com.cesarsoftdevelopment.makesale.viewmodel
 
-import com.cesarsoftdevelopment.sales.model.ProductSale
+import com.cesarsoftdevelopment.products.model.Product
 
 data class SalesState(
-    val items: List<ProductSale> = emptyList(),
+    val items: List<Product> = emptyList(),
     val quantity: Int = 0,
     val unitValue: Double = 0.0,
     val discountValue: Double = 0.0,

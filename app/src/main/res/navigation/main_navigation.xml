@@ -9,7 +9,17 @@
         android:id="@+id/homeFragment"
         android:name="com.cesarsoftdevelopment.home.view.HomeFragment"
         android:label="Home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_makeSaleFragment"
+            app:destination="@id/makeSaleFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/makeSaleFragment"
+        android:name="com.cesarsoftdevelopment.makesale.view.MakeSaleFragment"
+        android:label="Criar Venda"
+        tools:layout="@layout/fragment_make_sale" />
 
 
 <!--    <fragment-->

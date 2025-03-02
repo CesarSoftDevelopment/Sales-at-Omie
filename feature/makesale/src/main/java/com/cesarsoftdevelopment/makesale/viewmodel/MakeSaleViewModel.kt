@@ -2,16 +2,23 @@ package com.cesarsoftdevelopment.makesale.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.cesarsoftdevelopment.sales.model.ProductSale
+import com.cesarsoftdevelopment.models.Product
+import com.cesarsoftdevelopment.products.usecase.ProductsUseCase
 import com.cesarsoftdevelopment.sales.model.Sale
+import com.cesarsoftdevelopment.sales.usecase.SaveSaleUseCase
 import com.cesarsoftdevelopment.utils.FormatterUtil
 import com.cesarsoftdevelopment.utils.TextProvider
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class MakeSaleViewModel : ViewModel() {
+@HiltViewModel
+class MakeSaleViewModel(
+    private val saveSaleUseCase: SaveSaleUseCase,
+    private val productsUseCase : ProductsUseCase
+) : ViewModel() {
 
     private val _salesState = MutableStateFlow(SalesState())
     val salesState: StateFlow<SalesState> = _salesState
@@ -38,7 +45,7 @@ class MakeSaleViewModel : ViewModel() {
         }
     }
 
-    fun addDiscountToProducts(items: List<ProductSale>, discountValue : Double): List<ProductSale> {
+    fun addDiscountToProducts(items: List<Product>, discountValue : Double): List<Product> {
 
         val totalValue = items.sumOf {
             it.totalValue
@@ -76,7 +83,7 @@ class MakeSaleViewModel : ViewModel() {
     }
 
 
-    fun isValidField(clientName : String, product: ProductSale) : Boolean {
+    fun isValidField(clientName : String, product: Product) : Boolean {
 
         val error = when {
             clientName.isBlank() -> TextProvider.CLIENT_NAME_EMPTY
@@ -126,13 +133,13 @@ class MakeSaleViewModel : ViewModel() {
         }
     }
 
-    fun saveProduct(product: ProductSale) = viewModelScope.launch {
-        saveProductUseCase.invoke(product)
+    fun saveProduct(product: Product) = viewModelScope.launch {
+        productsUseCase.saveProductUseCase.invoke(product)
     }
 
     fun getProducts() {
         viewModelScope.launch {
-            getProductsUseCase.invoke().collect { itemsList ->
+            productsUseCase.getProductsUseCase.invoke().collect { itemsList ->
                 _salesState.update { currentState ->
                     currentState.copy(
                         items = itemsList
@@ -142,7 +149,7 @@ class MakeSaleViewModel : ViewModel() {
         }
     }
 
-    fun updateProduct(product: ProductSale, isSum : Boolean) = viewModelScope.launch {
+    fun updateProduct(product: Product, isSum : Boolean) = viewModelScope.launch {
         var quantity = product.quantity
 
         if(isSum) {
@@ -155,7 +162,7 @@ class MakeSaleViewModel : ViewModel() {
 
 
         val totalValue = product.unitValue * quantity
-        val item = ProductSale(
+        val item = Product(
             product.id,
             product.productName,
             quantity,
@@ -163,30 +170,30 @@ class MakeSaleViewModel : ViewModel() {
             totalValue
         )
 
-        updateProductUseCase.invoke(item)
+        productsUseCase.updateProductUseCase.invoke(item)
     }
 
-    fun updateProductAddDiscount(product: ProductSale) = viewModelScope.launch {
+    fun updateProductAddDiscount(product: Product) = viewModelScope.launch {
 
         val totalValue = 0.0
 
-        val item = ProductSale(
+        val item = Product(
             product.id,
             product.productName,
             product.quantity,
             product.unitValue,
             totalValue
         )
-        updateProductUseCase.invoke(item)
+        productsUseCase.updateProductUseCase.invoke(item)
     }
 
 
     fun deleteProduct(productId : Int) = viewModelScope.launch {
-        deleteProductUseCase.invoke(productId)
+        productsUseCase.deleteProductUseCase.invoke(productId)
     }
 
     fun deleteAllProducts() = viewModelScope.launch {
-        deleteAllProductsUseCase.invoke()
+        productsUseCase.deleteAllProductsUseCase.invoke()
     }
 
     fun saveSale(sale: Sale) = viewModelScope.launch {

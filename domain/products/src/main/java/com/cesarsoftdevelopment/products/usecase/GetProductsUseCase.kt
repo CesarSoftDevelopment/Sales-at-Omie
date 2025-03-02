@@ -1,6 +1,6 @@
 package com.cesarsoftdevelopment.products.usecase
 
-import com.cesarsoftdevelopment.products.model.Product
+import com.cesarsoftdevelopment.models.Product
 import com.cesarsoftdevelopment.products.repository.ProductsRepository
 import kotlinx.coroutines.flow.Flow
 

@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.navigation.findNavController
+import com.cesarsoftdevelopment.home.R
 import com.cesarsoftdevelopment.home.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
@@ -30,18 +32,17 @@ class HomeFragment : Fragment() {
     }
 
     private fun setUpNavigation() {
-      //  navigateToCreateSale()
-        //navigateToSales()
+        navigateToCreateSale()
+       // navigateToSales()
     }
 
-//    private fun navigateToCreateSale() {
-//        binding.mcCreateSale.setOnClickListener {
-//            it.findNavController().navigate(
-//                HomeFragmentDirections.actionNavigationHomeToNavigationMakeSale()
-//            )
-//        }
-//    }
-
+    private fun navigateToCreateSale() {
+        binding.mcCreateSale.setOnClickListener {
+            it.findNavController().navigate(
+                HomeFragmentDi
+            )
+        }
+    }
 //    private fun navigateToSales() {
 //        binding.mcSales.setOnClickListener {
 //            it.findNavController().navigate(

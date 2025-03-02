@@ -18,11 +18,13 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.cesarsoftdevelopment.makesale.R
 import com.cesarsoftdevelopment.makesale.adapter.MakeSaleAdapter
 import com.cesarsoftdevelopment.makesale.databinding.FragmentMakeSaleBinding
-import com.cesarsoftdevelopment.sales.model.ProductSale
+import com.cesarsoftdevelopment.makesale.viewmodel.MakeSaleViewModel
 import com.cesarsoftdevelopment.sales.model.Sale
 import com.cesarsoftdevelopment.utils.FormatterUtil
 import com.cesarsoftdevelopment.utils.SaleCalculator
 import com.google.android.material.snackbar.Snackbar
+import androidx.fragment.app.viewModels
+import com.cesarsoftdevelopment.models.Product
 import kotlinx.coroutines.launch
 
 class MakeSaleFragment : Fragment() {
@@ -37,15 +39,9 @@ class MakeSaleFragment : Fragment() {
     private var listItemsQuantity = 0
     private var totalOrderValue = 0.0
     private var discountValue = 0.0
-    private var listItems = listOf<ProductSale>()
+    private var listItems = listOf<Product>()
 
-    @Inject
-    lateinit var makeSaleViewModelFactory: MakeSaleViewModelFactory
-
-    val makeSaleViewModel: MakeSaleViewModel by viewModels {
-        makeSaleViewModelFactory
-    }
-
+    val makeSaleViewModel: MakeSaleViewModel by viewModels()
 
     override fun onCreateView (
         inflater: LayoutInflater, container: ViewGroup?,
@@ -100,17 +96,17 @@ class MakeSaleFragment : Fragment() {
 
     }
 
-    private fun getProductsList(items: List<ProductSale>) {
+    private fun getProductsList(items: List<Product>) {
         listItemsQuantity = items.size
         listItems = addDiscountToProducts(items)
         makeSaleAdapter.submitList(items)
     }
 
-    private fun addDiscountToProducts(items: List<ProductSale>): List<ProductSale> {
+    private fun addDiscountToProducts(items: List<Product>): List<Product> {
         return makeSaleViewModel.addDiscountToProducts(items, discountValue)
     }
 
-    private fun showTotalSaleAndItemsQtd(items: List<ProductSale>) {
+    private fun showTotalSaleAndItemsQtd(items: List<Product>) {
         totalOrderValue = SaleCalculator.calculateTotalProducts(items)
         totalOrderValue -= discountValue
 
@@ -187,7 +183,7 @@ class MakeSaleFragment : Fragment() {
             val productUnitValue = itemUnitValue
             val productTotalValue = itemValue
 
-            val product = ProductSale(0, productName, productQuantity, productUnitValue, productTotalValue)
+            val product = Product(0, productName, productQuantity, productUnitValue, productTotalValue)
 
             if (makeSaleViewModel.isValidField(clientName, product)) {
                 makeSaleViewModel.saveProduct(product)

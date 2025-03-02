@@ -8,20 +8,20 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.cesarsoftdevelopment.makesale.databinding.ProductItemBinding
 import com.cesarsoftdevelopment.makesale.viewmodel.MakeSaleViewModel
-import com.cesarsoftdevelopment.sales.model.ProductSale
+import com.cesarsoftdevelopment.models.Product
 import com.cesarsoftdevelopment.utils.FormatterUtil
 
 class MakeSaleAdapter (
     private val makeSaleViewModel: MakeSaleViewModel
-) : ListAdapter<ProductSale, MakeSaleAdapter.ViewHolder>(MakeSaleDiffCallback()) {
+) : ListAdapter<Product, MakeSaleAdapter.ViewHolder>(MakeSaleDiffCallback()) {
 
-    class MakeSaleDiffCallback : DiffUtil.ItemCallback<ProductSale>() {
+    class MakeSaleDiffCallback : DiffUtil.ItemCallback<Product>() {
 
-        override fun areItemsTheSame(oldItem: ProductSale, newItem: ProductSale): Boolean {
+        override fun areItemsTheSame(oldItem: Product, newItem: Product): Boolean {
             return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: ProductSale, newItem: ProductSale): Boolean {
+        override fun areContentsTheSame(oldItem: Product, newItem: Product): Boolean {
             return oldItem == newItem
         }
     }
@@ -41,13 +41,13 @@ class MakeSaleAdapter (
     ): RecyclerView.ViewHolder(binding.root) {
 
         @SuppressLint("SetTextI18n")
-        fun bind(item : ProductSale) {
+        fun bind(item : Product) {
             binding.productName.text = item.productName
             binding.productQuantity.text = item.quantity.toString()
             binding.productUnitValue.text = "Valor unitário: ${FormatterUtil.formatToBrazilianCurrency(item.unitValue)}"
             binding.productTotalValue.text = "Valor total: ${FormatterUtil.formatToBrazilianCurrency(item.totalValue)}"
 
-            val product = ProductSale(
+            val product = Product(
                 item.id,
                 item.productName,
                 item.quantity,
