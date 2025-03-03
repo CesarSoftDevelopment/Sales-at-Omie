@@ -3,23 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/homeFragment">
+    app:startDestination="@+id/nav_home">
 
-    <fragment
-        android:id="@+id/homeFragment"
-        android:name="com.cesarsoftdevelopment.home.view.HomeFragment"
-        android:label="Home"
-        tools:layout="@layout/fragment_home" >
-        <action
-            android:id="@+id/action_homeFragment_to_makeSaleFragment"
-            app:destination="@id/makeSaleFragment" />
-    </fragment>
 
-    <fragment
-        android:id="@+id/makeSaleFragment"
-        android:name="com.cesarsoftdevelopment.makesale.view.MakeSaleFragment"
-        android:label="Criar Venda"
-        tools:layout="@layout/fragment_make_sale" />
+    <include app:graph="@navigation/nav_home" />
+
+    <include app:graph="@navigation/nav_makesale" />
 
 
 <!--    <fragment-->

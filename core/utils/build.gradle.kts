@@ -19,9 +19,6 @@ android {
 
 dependencies {
 
-    implementation(project(":data:products"))
-    implementation(project(":domain:products"))
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

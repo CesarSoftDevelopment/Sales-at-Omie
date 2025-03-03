@@ -1,6 +1,6 @@
 package com.cesarsoftdevelopment.products.repository
 
-import com.cesarsoftdevelopment.products.model.Product
+import com.cesarsoftdevelopment.models.Product
 import kotlinx.coroutines.flow.Flow
 
 interface ProductsRepository {

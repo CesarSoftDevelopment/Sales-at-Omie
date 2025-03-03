@@ -1,0 +1,293 @@
+package com.cesarsoftdevelopment.makesale.presentation.view
+
+import android.graphics.Color
+import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import com.cesarsoftdevelopment.makesale.R
+import com.cesarsoftdevelopment.makesale.presentation.adapter.MakeSaleAdapter
+import com.cesarsoftdevelopment.makesale.databinding.FragmentMakeSaleBinding
+import com.cesarsoftdevelopment.makesale.presentation.viewmodel.MakeSaleViewModel
+import com.google.android.material.snackbar.Snackbar
+import androidx.fragment.app.viewModels
+import com.cesarsoftdevelopment.makesale.domain.model.Product
+import com.cesarsoftdevelopment.makesale.domain.model.Sale
+import com.cesarsoftdevelopment.makesale.utils.FormatterUtil
+import com.cesarsoftdevelopment.makesale.utils.SaleCalculator
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+
+@AndroidEntryPoint
+class MakeSaleFragment : Fragment() {
+    private lateinit var makeSaleAdapter: MakeSaleAdapter
+    private var _binding: FragmentMakeSaleBinding? = null
+    private val binding get() = _binding!!
+    private lateinit var unitValueFormatted : String
+    private lateinit var discountValueFormatted : String
+    private var itemUnitValue = 0.0
+    private var itemQuantity = 0
+    private var itemValue = 0.0
+    private var listItemsQuantity = 0
+    private var totalOrderValue = 0.0
+    private var discountValue = 0.0
+    private var listItems = listOf<Product>()
+
+    val makeSaleViewModel: MakeSaleViewModel by viewModels()
+
+    override fun onCreateView (
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentMakeSaleBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setupTextWatchers()
+        getUiState()
+        setAdapter()
+        handleWhenCancelButtonIsClicked()
+        handleOnBackPressed()
+        saveProduct()
+        saveSale()
+    }
+
+
+    private fun getUiState() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                makeSaleViewModel.salesState.collect { uiState ->
+                    itemUnitValue = uiState.unitValue
+                    unitValueFormatted = uiState.unitValueFormatted
+                    discountValue = uiState.discountValue
+                    discountValueFormatted = uiState.discountValueFormatted
+                    itemQuantity = uiState.quantity
+                    itemValue = uiState.itemValue
+
+                    setTextWithProductTotalValueFormatted(uiState.itemValueFormatted)
+                    setErrorMessage(uiState.errorMessage)
+                    getProductsList(uiState.items)
+                    showTotalSaleAndItemsQtd(uiState.items)
+                }
+            }
+        }
+    }
+
+
+    private fun setTextWithProductTotalValueFormatted(formattedValue: String) {
+        binding.itemValue.text = resources.getString(R.string.total_item_value, formattedValue)
+    }
+
+    private fun setErrorMessage(errorMessage: String) {
+        if(errorMessage.isNotBlank()) {
+            Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_LONG).show()
+            makeSaleViewModel.clearErrorMessage()
+        }
+
+    }
+
+    private fun getProductsList(items: List<Product>) {
+        listItemsQuantity = items.size
+        listItems = addDiscountToProducts(items)
+        makeSaleAdapter.submitList(items)
+    }
+
+    private fun addDiscountToProducts(items: List<Product>): List<Product> {
+        return makeSaleViewModel.addDiscountToProducts(items, discountValue)
+    }
+
+    private fun showTotalSaleAndItemsQtd(items: List<Product>) {
+        totalOrderValue = SaleCalculator.calculateTotalProducts(items)
+        totalOrderValue -= discountValue
+
+        binding.productQuantitySale.text = resources.getString(R.string.items_qtd, listItemsQuantity)
+        binding.totalSale.text = resources.getString(
+            R.string.total_value_sale,
+            FormatterUtil.formatToBrazilianCurrency(totalOrderValue)
+        )
+    }
+
+    private fun setupTextWatchers() {
+        binding.productQuantity.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(char: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(char: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(editable: Editable?) {
+                val quantity = editable.toString().toIntOrNull() ?: 0
+                makeSaleViewModel.setQuantity(quantity)
+            }
+        })
+
+        binding.unitProductValue.addTextChangedListener(object : TextWatcher {
+            var currentValue = ""
+
+            override fun beforeTextChanged(char: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(char: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(editable: Editable?) {
+                val textValue = editable.toString()
+
+                if(textValue != currentValue) {
+                    binding.unitProductValue.removeTextChangedListener(this)
+                    makeSaleViewModel.processUnitValue(textValue)
+
+                    currentValue = unitValueFormatted
+                    binding.unitProductValue.setText(unitValueFormatted)
+                    binding.unitProductValue.setSelection(unitValueFormatted.length)
+                    binding.unitProductValue.addTextChangedListener(this)
+                }
+            }
+        })
+
+        binding.discountProductValue.addTextChangedListener(object : TextWatcher {
+            var currentValue = ""
+
+            override fun beforeTextChanged(char: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(char: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(editable: Editable?) {
+                val textValue = editable.toString()
+
+                if(textValue != currentValue) {
+                    binding.discountProductValue.removeTextChangedListener(this)
+                    makeSaleViewModel.processDiscountValue(textValue)
+                    getProductsList(listItems)
+                    currentValue = discountValueFormatted
+
+                    binding.discountProductValue.setText(discountValueFormatted)
+                    binding.discountProductValue.setSelection(discountValueFormatted.length)
+                    binding.discountProductValue.addTextChangedListener(this)
+                }
+            }
+        })
+
+    }
+
+
+
+    private fun saveProduct() {
+        binding.btnInsert.setOnClickListener {
+            val clientName = binding.clientName.text.toString()
+            val productName = binding.productName.text.toString()
+            val productQuantity = itemQuantity
+            val productUnitValue = itemUnitValue
+            val productTotalValue = itemValue
+
+            val product = Product(0, productName, productQuantity, productUnitValue, productTotalValue)
+
+            if (makeSaleViewModel.isValidField(clientName, product)) {
+                makeSaleViewModel.saveProduct(product)
+                makeSaleViewModel.getProducts()
+                clearFields()
+                binding.clientName.isEnabled = false
+            }
+        }
+    }
+
+    private fun saveSale() {
+        binding.btnSaveSale.setOnClickListener {
+            val clientName = binding.clientName.text.toString()
+            val listSize = listItemsQuantity
+
+            if (makeSaleViewModel.validateFieldsToMakeSale(clientName, listSize)) {
+                val sale = Sale(0, clientName, totalOrderValue, listItems)
+                makeSaleViewModel.saveSale(sale)
+                makeSaleViewModel.deleteAllProducts()
+                binding.clientName.text?.clear()
+                binding.clientName.isEnabled = true
+                showSnackBarWithAction()
+            }
+        }
+    }
+
+    private fun setAdapter() {
+        makeSaleAdapter = MakeSaleAdapter(makeSaleViewModel)
+        binding.recyclerItems.apply { adapter = makeSaleAdapter }
+    }
+
+    private fun clearFields() {
+        binding.productName.text?.clear()
+        binding.productQuantity.text?.clear()
+        binding.unitProductValue.text?.clear()
+    }
+
+    private fun createAlertDialog() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Cancelar pedido.")
+        builder.setMessage("Você perderá os itens adicionados na lista. Deseja sair?")
+
+        builder.setPositiveButton("Sim") { dialog, which ->
+            makeSaleViewModel.deleteAllProducts()
+            // navigateToHomeFragment()
+        }
+
+        builder.setNegativeButton("Não") { dialog, which ->
+            dialog.dismiss()
+        }
+
+        val alertDialog = builder.create()
+        alertDialog.show()
+    }
+
+    private fun showSnackBarWithAction() {
+        val rootView = requireView()
+        val snackbar = Snackbar.make(rootView, "Venda feita com sucesso!", Snackbar.LENGTH_LONG)
+
+        snackbar.setAction("Voltar") {
+            // navigateToHomeFragment()
+        }
+
+        snackbar.setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.green))
+        snackbar.setActionTextColor(Color.WHITE)
+        snackbar.show()
+    }
+
+    private fun handleWhenCancelButtonIsClicked() {
+        binding.btnCancel.setOnClickListener {
+            if (listItemsQuantity > 0) {
+                createAlertDialog()
+            } else {
+                //  navigateToHomeFragment()
+            }
+        }
+    }
+
+    private fun handleOnBackPressed() {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (listItemsQuantity > 0) {
+                        createAlertDialog()
+                    } else {
+                        //  navigateToHomeFragment()
+                    }
+                }
+            })
+    }
+
+//    private fun navigateToHomeFragment() {
+//        requireView().findNavController().navigate(
+//            MakeSaleFragmentDirections.actionNavigationMakeSaleToNavigationHome()
+//        )
+//    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        makeSaleViewModel.deleteAllProducts()
+        _binding = null
+    }
+
+}

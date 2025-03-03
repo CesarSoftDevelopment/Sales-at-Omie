@@ -20,13 +20,13 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
-        val appBarConfiguration = AppBarConfiguration (
-            setOf(
-                R.id.homeFragment,
-               // R.id.navigation_make_sale
-            )
-        )
-        setupActionBarWithNavController(navController, appBarConfiguration)
+//        val appBarConfiguration = AppBarConfiguration (
+//            setOf(
+//                R.id.homeFragment,
+//               // R.id.navigation_make_sale
+//            )
+//        )
+//        setupActionBarWithNavController(navController, appBarConfiguration)
     }
 
     override fun onSupportNavigateUp(): Boolean {

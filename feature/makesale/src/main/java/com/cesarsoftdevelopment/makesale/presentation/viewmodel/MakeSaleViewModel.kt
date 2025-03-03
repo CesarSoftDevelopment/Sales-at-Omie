@@ -1,0 +1,205 @@
+package com.cesarsoftdevelopment.makesale.presentation.viewmodel
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.cesarsoftdevelopment.makesale.domain.model.Product
+import com.cesarsoftdevelopment.makesale.domain.model.Sale
+import com.cesarsoftdevelopment.makesale.domain.usecase.ProductsUseCase
+import com.cesarsoftdevelopment.makesale.domain.usecase.SalesUseCase
+import com.cesarsoftdevelopment.makesale.domain.usecase.SaveSaleUseCase
+import com.cesarsoftdevelopment.makesale.utils.FormatterUtil
+import com.cesarsoftdevelopment.makesale.utils.TextProvider
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+
+@HiltViewModel
+class MakeSaleViewModel @Inject constructor(
+    private val salesUseCase: SalesUseCase,
+    private val productsUseCase : ProductsUseCase
+) : ViewModel() {
+
+    private val _salesState = MutableStateFlow(SalesState())
+    val salesState: StateFlow<SalesState> = _salesState
+
+    fun processUnitValue(textValue: String) {
+        val cleanString = textValue.replace("[^\\d]".toRegex(), "")
+        val parsed = cleanString.toDoubleOrNull() ?: 0.0
+        val formatted = FormatterUtil.formatToBrazilianCurrency(parsed)
+
+        _salesState.update { currentState ->
+            currentState.copy(unitValue = parsed, unitValueFormatted = formatted)
+        }
+
+        calculateItemTotal()
+    }
+
+    fun processDiscountValue(textValue: String) {
+        val cleanString = textValue.replace("[^\\d]".toRegex(), "")
+        val parsed = cleanString.toDoubleOrNull() ?: 0.0
+        val formatted = FormatterUtil.formatToBrazilianCurrency(parsed)
+
+        _salesState.update { currentState ->
+            currentState.copy(discountValue = parsed, discountValueFormatted = formatted)
+        }
+    }
+
+    fun addDiscountToProducts(items: List<Product>, discountValue : Double): List<Product> {
+
+        val totalValue = items.sumOf {
+            it.totalValue
+        }
+
+        return items.map { product ->
+            val proportionalDiscount = (product.totalValue / totalValue) * discountValue
+            product.copy(
+                totalValue = product.totalValue - proportionalDiscount
+            )
+        }
+    }
+
+
+    fun setQuantity(quantity: Int) {
+        _salesState.update { currentState ->
+            currentState.copy(quantity = quantity)
+        }
+
+        calculateItemTotal()
+    }
+
+    private fun calculateItemTotal() {
+        val productQuantity = _salesState.value.quantity
+        val productUnitValue = _salesState.value.unitValue
+
+        val total = productQuantity * productUnitValue
+
+        _salesState.update { currentState ->
+            currentState.copy(
+                itemValueFormatted = FormatterUtil.formatToBrazilianCurrency(total),
+                itemValue = total
+            )
+        }
+    }
+
+
+    fun isValidField(clientName : String, product: Product) : Boolean {
+
+        val error = when {
+            clientName.isBlank() -> TextProvider.CLIENT_NAME_EMPTY
+            product.productName.isBlank() -> TextProvider.PRODUCT_NAME_EMPTY
+            product.quantity <= 0 -> TextProvider.QUANTITY_LESS_THAN_ZERO
+            product.unitValue <= 0 ->  TextProvider.UNIT_VALUE_LESS_THAN_ZERO
+            product.totalValue <= 0 -> TextProvider.TOTAL_VALUE_LESS_THAN_ZERO
+            else -> null
+        }
+
+        return if (error != null) {
+            _salesState.update { currentState ->
+                currentState.copy(errorMessage = error)
+            }
+            false
+        } else {
+            _salesState.update { currentState ->
+                currentState.copy(errorMessage = "")
+            }
+            true
+        }
+
+    }
+
+    fun validateFieldsToMakeSale(clientName : String, listSize : Int) : Boolean {
+
+        if(clientName.isBlank()) {
+            _salesState.update { currentState ->
+                currentState.copy(errorMessage = TextProvider.CLIENT_NAME_EMPTY)
+            }
+            return false
+        }
+
+        if(listSize <= 0) {
+            _salesState.update { currentState ->
+                currentState.copy(errorMessage = TextProvider.LIST_EMPTY)
+            }
+            return false
+        }
+        return true
+    }
+
+
+    fun clearErrorMessage() {
+        _salesState.update { currentState ->
+            currentState.copy(errorMessage = "")
+        }
+    }
+
+    fun saveProduct(product: Product) = viewModelScope.launch {
+        productsUseCase.saveProductUseCase.invoke(product)
+    }
+
+    fun getProducts() {
+        viewModelScope.launch {
+            productsUseCase.getProductsUseCase.invoke().collect { itemsList ->
+                _salesState.update { currentState ->
+                    currentState.copy(
+                        items = itemsList
+                    )
+                }
+            }
+        }
+    }
+
+    fun updateProduct(product: Product, isSum : Boolean) = viewModelScope.launch {
+        var quantity = product.quantity
+
+        if(isSum) {
+            quantity += 1
+        }else {
+            if (quantity > 1) {
+                quantity -= 1
+            }
+        }
+
+
+        val totalValue = product.unitValue * quantity
+        val item = Product(
+            product.id,
+            product.productName,
+            quantity,
+            product.unitValue,
+            totalValue
+        )
+
+        productsUseCase.updateProductUseCase.invoke(item)
+    }
+
+    fun updateProductAddDiscount(product: Product) = viewModelScope.launch {
+
+        val totalValue = 0.0
+
+        val item = Product(
+            product.id,
+            product.productName,
+            product.quantity,
+            product.unitValue,
+            totalValue
+        )
+        productsUseCase.updateProductUseCase.invoke(item)
+    }
+
+
+    fun deleteProduct(productId : Int) = viewModelScope.launch {
+        productsUseCase.deleteProductUseCase.invoke(productId)
+    }
+
+    fun deleteAllProducts() = viewModelScope.launch {
+        productsUseCase.deleteAllProductsUseCase.invoke()
+    }
+
+    fun saveSale(sale: Sale) = viewModelScope.launch {
+        salesUseCase.saveSaleUseCase.invoke(sale)
+    }
+
+}

@@ -1,0 +1,16 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /home/cesarsoftdevelopment/workspace/android/personalwork/Sales-at-Omie/core/utils/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest14936313091817039248.xml:2:13-83
+INJECTED from /home/cesarsoftdevelopment/workspace/android/personalwork/Sales-at-Omie/core/utils/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest14936313091817039248.xml:2:13-83
+	package
+		INJECTED from /home/cesarsoftdevelopment/workspace/android/personalwork/Sales-at-Omie/core/utils/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest14936313091817039248.xml
+	xmlns:android
+		ADDED from /home/cesarsoftdevelopment/workspace/android/personalwork/Sales-at-Omie/core/utils/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest14936313091817039248.xml:2:23-81
+uses-sdk
+INJECTED from /home/cesarsoftdevelopment/workspace/android/personalwork/Sales-at-Omie/core/utils/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest14936313091817039248.xml reason: use-sdk injection requested
+INJECTED from /home/cesarsoftdevelopment/workspace/android/personalwork/Sales-at-Omie/core/utils/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest14936313091817039248.xml
+INJECTED from /home/cesarsoftdevelopment/workspace/android/personalwork/Sales-at-Omie/core/utils/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest14936313091817039248.xml
+	android:targetSdkVersion
+		INJECTED from /home/cesarsoftdevelopment/workspace/android/personalwork/Sales-at-Omie/core/utils/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest14936313091817039248.xml
+	android:minSdkVersion
+		INJECTED from /home/cesarsoftdevelopment/workspace/android/personalwork/Sales-at-Omie/core/utils/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest14936313091817039248.xml

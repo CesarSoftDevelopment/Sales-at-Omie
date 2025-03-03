@@ -1,5 +1,6 @@
 package com.cesarsoftdevelopment.home.view
 
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -38,9 +39,7 @@ class HomeFragment : Fragment() {
 
     private fun navigateToCreateSale() {
         binding.mcCreateSale.setOnClickListener {
-            it.findNavController().navigate(
-                HomeFragmentDi
-            )
+            it.findNavController().navigate(Uri.parse("myapp://makesale"))
         }
     }
 //    private fun navigateToSales() {

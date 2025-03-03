@@ -17,6 +17,9 @@
             android:name=".ui.main.MainActivity"
             android:exported="true"
             android:label="@string/app_name">
+
+            <nav-graph android:value="@navigation/main_navigation" />
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

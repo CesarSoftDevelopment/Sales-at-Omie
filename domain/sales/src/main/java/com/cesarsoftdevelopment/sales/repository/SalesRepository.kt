@@ -1,6 +1,6 @@
 package com.cesarsoftdevelopment.sales.repository
 
-import com.cesarsoftdevelopment.sales.model.Sale
+import com.cesarsoftdevelopment.models.Sale
 import kotlinx.coroutines.flow.Flow
 
 interface SalesRepository {
