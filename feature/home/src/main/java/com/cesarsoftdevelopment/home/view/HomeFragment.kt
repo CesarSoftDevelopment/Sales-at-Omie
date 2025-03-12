@@ -39,9 +39,10 @@ class HomeFragment : Fragment() {
 
     private fun navigateToCreateSale() {
         binding.mcCreateSale.setOnClickListener {
-            it.findNavController().navigate(Uri.parse("myapp://makesale"))
+            it.findNavController().navigate(Uri.parse("omiesales://makesale"))
         }
     }
+
 //    private fun navigateToSales() {
 //        binding.mcSales.setOnClickListener {
 //            it.findNavController().navigate(

@@ -12,6 +12,8 @@
         android:label="Home"
         tools:layout="@layout/fragment_home">
 
+        <deepLink app:uri="omiesales://home"/>
+
     </fragment>
 
 </navigation>

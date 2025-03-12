@@ -11,7 +11,7 @@
         android:label="Home"
         tools:layout="@layout/fragment_make_sale">
 
-        <deepLink app:uri="myapp://makesale" />
+        <deepLink app:uri="omiesales://makesale"/>
 
     </fragment>
 

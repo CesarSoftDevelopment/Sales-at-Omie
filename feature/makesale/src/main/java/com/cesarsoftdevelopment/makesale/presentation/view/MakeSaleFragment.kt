@@ -1,6 +1,7 @@
 package com.cesarsoftdevelopment.makesale.presentation.view
 
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -21,6 +22,7 @@ import com.cesarsoftdevelopment.makesale.databinding.FragmentMakeSaleBinding
 import com.cesarsoftdevelopment.makesale.presentation.viewmodel.MakeSaleViewModel
 import com.google.android.material.snackbar.Snackbar
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import com.cesarsoftdevelopment.makesale.domain.model.Product
 import com.cesarsoftdevelopment.makesale.domain.model.Sale
 import com.cesarsoftdevelopment.makesale.utils.FormatterUtil
@@ -230,7 +232,7 @@ class MakeSaleFragment : Fragment() {
 
         builder.setPositiveButton("Sim") { dialog, which ->
             makeSaleViewModel.deleteAllProducts()
-            // navigateToHomeFragment()
+            navigateToHomeFragment()
         }
 
         builder.setNegativeButton("Não") { dialog, which ->
@@ -246,7 +248,7 @@ class MakeSaleFragment : Fragment() {
         val snackbar = Snackbar.make(rootView, "Venda feita com sucesso!", Snackbar.LENGTH_LONG)
 
         snackbar.setAction("Voltar") {
-            // navigateToHomeFragment()
+            navigateToHomeFragment()
         }
 
         snackbar.setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.green))
@@ -259,7 +261,7 @@ class MakeSaleFragment : Fragment() {
             if (listItemsQuantity > 0) {
                 createAlertDialog()
             } else {
-                //  navigateToHomeFragment()
+                navigateToHomeFragment()
             }
         }
     }
@@ -272,17 +274,15 @@ class MakeSaleFragment : Fragment() {
                     if (listItemsQuantity > 0) {
                         createAlertDialog()
                     } else {
-                        //  navigateToHomeFragment()
+                        navigateToHomeFragment()
                     }
                 }
             })
     }
 
-//    private fun navigateToHomeFragment() {
-//        requireView().findNavController().navigate(
-//            MakeSaleFragmentDirections.actionNavigationMakeSaleToNavigationHome()
-//        )
-//    }
+    private fun navigateToHomeFragment() {
+        requireView().findNavController().navigate(Uri.parse("omiesales://home"))
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
